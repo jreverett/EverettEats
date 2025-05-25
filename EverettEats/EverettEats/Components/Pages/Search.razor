@@ -1,0 +1,144 @@
+﻿@page "/search"
+@rendermode RenderMode.InteractiveServer
+@using EverettEats.Enums
+@using EverettEats.Models
+@using EverettEats.Services
+@inject IRecipeService RecipeService
+@inject NavigationManager Navigation
+
+<PageTitle>Search Recipes - Everett Eats</PageTitle>
+
+<div class="search-page">
+    <div class="container">
+        <div class="search-header">
+            <h1>Search Recipes</h1>
+            <p>Find your next favorite dish</p>
+        </div>
+
+        <div class="search-controls">
+            <div class="search-section">
+                <input type="text" @bind="searchTerm" @onkeyup="SearchRecipes" @oninput="SearchRecipes"
+                       placeholder="Search recipes..." class="search-input" />
+            </div>
+
+            <div class="category-filter">
+                <button class="filter-btn @(selectedCategory == null ? "active" : "")"
+                        @onclick="() => FilterByCategory(null)">
+                    All
+                </button>
+                @foreach (var category in Enum.GetValues<RecipeCategory>())
+                {
+                    <button class="filter-btn @(selectedCategory == category ? "active" : "")"
+                            @onclick="() => FilterByCategory(category)">
+                        @category
+                    </button>
+                }
+            </div>
+        </div>        <div class="search-results">
+            @if (isLoading)
+            {
+                <LoadingSpinner Text="Searching recipes..." />
+            }
+            else if (filteredRecipes?.Any() == true)
+            {
+                <div class="results-info">
+                    <p>Found @filteredRecipes.Count recipe@(filteredRecipes.Count == 1 ? "" : "s")</p>
+                </div>
+                <div class="recipes-grid">
+                    @foreach (var recipe in filteredRecipes)
+                    {
+                        <div class="recipe-card" @onclick="() => NavigateToRecipe(recipe)">
+                            <div class="recipe-card-image">
+                                <img src="@recipe.ImageUrl" alt="@recipe.Title" loading="lazy" />
+                                <div class="recipe-card-category">@recipe.Category</div>
+                            </div>
+                            <div class="recipe-card-content">
+                                <h3 class="recipe-card-title">@recipe.Title</h3>
+                                <p class="recipe-card-description">@recipe.Description</p>
+                                <div class="recipe-card-meta">
+                                    <span class="cook-time">🕒 @recipe.TotalTime</span>
+                                    <span class="difficulty">@GetDifficultyEmoji(recipe.Difficulty) @recipe.Difficulty</span>
+                                </div>
+                                <div class="recipe-card-tags">
+                                    @foreach (var tag in recipe.Tags.Take(3))
+                                    {
+                                        <span class="tag-small">@tag</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else if (!isLoading)
+            {
+                <div class="no-results">
+                    <h3>No recipes found</h3>
+                    <p>Try adjusting your search or filter criteria.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Recipe>? allRecipes;
+    private List<Recipe>? filteredRecipes;
+    private string searchTerm = string.Empty;
+    private RecipeCategory? selectedCategory;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        allRecipes = await RecipeService.GetAllRecipesAsync();
+        filteredRecipes = allRecipes;
+        isLoading = false;
+    }
+
+    private async Task SearchRecipes()
+    {
+        isLoading = true;
+        StateHasChanged();
+
+        // Add small delay for better UX
+        await Task.Delay(100);
+
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            filteredRecipes = selectedCategory.HasValue
+                ? await RecipeService.GetRecipesByCategoryAsync(selectedCategory.Value)
+                : allRecipes;
+        }
+        else
+        {
+            var searchResults = await RecipeService.SearchRecipesAsync(searchTerm);
+            filteredRecipes = selectedCategory.HasValue
+                ? searchResults.Where(r => r.Category == selectedCategory.Value).ToList()
+                : searchResults;
+        }
+
+        isLoading = false;
+    }
+
+    private async Task FilterByCategory(RecipeCategory? category)
+    {
+        selectedCategory = category;
+        await SearchRecipes();
+    }
+
+    private void NavigateToRecipe(Recipe recipe)
+    {
+        Navigation.NavigateTo($"/recipe/{recipe.Slug}");
+    }
+
+    private static string GetDifficultyEmoji(DifficultyLevel difficulty)
+    {
+        return difficulty switch
+        {
+            DifficultyLevel.Easy => "⭐",
+            DifficultyLevel.Medium => "⭐⭐",
+            DifficultyLevel.Hard => "⭐⭐⭐",
+            _ => "⭐"
+        };
+    }
+}

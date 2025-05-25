@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />    <link rel="stylesheet" href="@Assets["app.css"]?v=@GetAssetVersion("app.css")" />
+    <link rel="stylesheet" href="@Assets["EverettEats.styles.css"]?v=@GetAssetVersion("EverettEats.styles.css")" />
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#b45309" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Everett Eats" />
+    
+    <ImportMap />
+    <HeadOutlet />
+</head>
+
+<body>
+    <Routes />
+    <script src="_framework/blazor.web.js"></script>
+    <script src="js/site.js?v=@GetAssetVersion("js/site.js")"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });            });
+        }
+    </script>
+</body>
+
+</html>
+
+@code {
+    private static readonly Dictionary<string, string> _versionCache = new();
+
+    private string GetAssetVersion(string assetPath)
+    {
+        // Remove leading slash if present
+        var normalizedPath = assetPath.TrimStart('/');
+        
+        // Check cache first
+        if (_versionCache.TryGetValue(normalizedPath, out var cachedVersion))
+        {
+            return cachedVersion;
+        }
+
+        try
+        {
+            // Get the full file path in wwwroot
+            var wwwrootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            var fullPath = Path.Combine(wwwrootPath, normalizedPath);
+            
+            if (File.Exists(fullPath))
+            {
+                // Get file's last write time as version
+                var lastWriteTime = File.GetLastWriteTimeUtc(fullPath);
+                var version = lastWriteTime.Ticks.ToString();
+                
+                // Cache the version
+                _versionCache[normalizedPath] = version;
+                return version;
+            }
+        }
+        catch
+        {
+            // Ignore file access errors
+        }
+
+        // Fallback to current time
+        var fallbackVersion = DateTime.Now.Ticks.ToString();
+        _versionCache[normalizedPath] = fallbackVersion;
+        return fallbackVersion;
+    }
+}

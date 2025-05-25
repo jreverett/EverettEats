@@ -1,0 +1,32 @@
+﻿@inherits LayoutComponentBase
+
+<div class="main-layout">
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="nav-brand">
+                <span class="brand-icon">🍽️</span>
+                Everett Eats
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/search" class="nav-link">Recipes</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        @Body
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Everett Eats. Made with ❤️ for sharing delicious recipes.</p>
+        </div>
+    </footer>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
