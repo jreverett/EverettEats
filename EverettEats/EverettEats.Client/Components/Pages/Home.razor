@@ -11,12 +11,20 @@
     <div class="home-header">
         <h1 class="home-title">Welcome to the Kitchen</h1>
         <p class="home-subtitle">Simple, delicious recipes made with love</p>
-    </div>
-
-    <div class="recipes-section">
+    </div>    <div class="recipes-section">
         @if (isLoading)
         {
             <LoadingSpinner Text="Loading delicious recipes..." />
+        }
+        else if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="error-message" style="color: red; text-align: center; padding: 2rem;">
+                <h3>⚠️ Error</h3>
+                <p>@errorMessage</p>
+                <button @onclick="() => Navigation.Refresh()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #b45309; color: white; border: none; border-radius: 0.25rem; cursor: pointer;">
+                    Retry
+                </button>
+            </div>
         }
         else
         {
@@ -64,11 +72,21 @@
 @code {
     private List<Recipe> recipes = [];
     private bool isLoading = true;
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
-        recipes = await RecipeService.GetAllRecipesAsync();
-        isLoading = false;
+        try
+        {
+            recipes = await RecipeService.GetAllRecipesAsync();
+            isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading recipes: {ex.Message}";
+            isLoading = false;
+            Console.WriteLine($"Home page error: {ex}");
+        }
     }
 
     private void NavigateToRecipe(Recipe recipe)

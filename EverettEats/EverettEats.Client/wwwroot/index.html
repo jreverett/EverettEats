@@ -56,12 +56,31 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    
-    <script src="_framework/blazor.webassembly.js"></script>
+      <script src="_framework/blazor.webassembly.js"></script>
     <script src="js/site.js"></script>
     
-    <!-- Service Worker Registration -->
+    <!-- Enhanced Error Handling -->
     <script>
+        window.addEventListener('unhandledrejection', function (event) {
+            console.error('Unhandled promise rejection:', event.reason);
+        });
+        
+        window.addEventListener('error', function (event) {
+            console.error('Global error:', event.error);
+        });
+        
+        // Override Blazor error handler for better logging
+        window.Blazor = window.Blazor || {};
+        window.Blazor.start = window.Blazor.start || function() {};
+        
+        // Log when Blazor starts
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, waiting for Blazor...');
+        });
+    </script>
+      <!-- Service Worker Registration (temporarily disabled for debugging) -->
+    <script>
+        /*
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('/sw.js')
@@ -73,6 +92,8 @@
                     });
             });
         }
+        */
+        console.log('Service worker registration disabled for debugging');
     </script>
 </body>
 
