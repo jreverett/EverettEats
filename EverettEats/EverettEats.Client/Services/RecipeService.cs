@@ -25,7 +25,6 @@ public class RecipeService : IRecipeService
 	{
 		return Task.FromResult(_recipes.Where(r => r.Category == category).ToList());
 	}
-
 	public Task<List<Recipe>> SearchRecipesAsync(string searchTerm)
 	{
 		if (string.IsNullOrWhiteSpace(searchTerm))
@@ -34,7 +33,8 @@ public class RecipeService : IRecipeService
 		var results = _recipes.Where(r =>
 			r.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
 			r.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-			r.Tags.Any(tag => tag.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+			r.Tags.Any(tag => tag.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+			r.Ingredients.Any(ingredient => ingredient.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
 		).ToList();
 
 		return Task.FromResult(results);

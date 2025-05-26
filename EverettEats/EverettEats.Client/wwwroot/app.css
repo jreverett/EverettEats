@@ -394,20 +394,23 @@ a {
 }
 
 .back-btn, .share-btn {
-    background: var(--primary-color);
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-light));
     color: white;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     cursor: pointer;
     font-weight: 500;
-    transition: background 0.2s;
+    transition: all 0.3s ease;
     text-decoration: none;
     display: inline-block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
     .back-btn:hover, .share-btn:hover {
-        background: var(--primary-dark);
+        background: linear-gradient(135deg, var(--primary-light), var(--secondary-color));
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         text-decoration: none;
         color: white;
     }
@@ -468,12 +471,21 @@ a {
 }
 
 .tag {
-    background: var(--primary-color);
-    color: white;
+    background: linear-gradient(135deg, var(--accent-light), #fde68a);
+    color: var(--primary-dark);
     padding: 0.25rem 0.75rem;
     border-radius: 1rem;
     font-size: 0.875rem;
     font-weight: 500;
+    border: 1px solid var(--secondary-color);
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tag:hover {
+    background: linear-gradient(135deg, #fde68a, var(--accent-light));
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .recipe-image img {
