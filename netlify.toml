@@ -1,10 +1,10 @@
 [build]
-  base = "EverettEats/EverettEats"
+  base = "EverettEats/EverettEats.Client"
   command = "dotnet publish -c Release -o publish"
   publish = "publish/wwwroot"
 
 [build.environment]
-  DOTNET_VERSION = "9.0"
+  DOTNET_VERSION = "8.0"
 
 # Redirect all routes to index.html for SPA routing
 [[redirects]]
