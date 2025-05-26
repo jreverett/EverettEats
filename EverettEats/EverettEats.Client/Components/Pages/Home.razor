@@ -1,107 +1,10 @@
 @page "/"
 @rendermode RenderMode.InteractiveWebAssembly
-@using EverettEats.Client.Models
-@using EverettEats.Client.Services
-@inject IRecipeService RecipeService
 @inject NavigationManager Navigation
 
-<PageTitle>Everett Eats - Delicious Homemade Recipes</PageTitle>
-
-<div class="home-container">
-    <div class="home-header">
-        <h1 class="home-title">Welcome to the Kitchen</h1>
-        <p class="home-subtitle">Simple, delicious recipes made with love</p>
-    </div>    <div class="recipes-section">
-        @if (isLoading)
-        {
-            <LoadingSpinner Text="Loading delicious recipes..." />
-        }
-        else if (!string.IsNullOrEmpty(errorMessage))
-        {
-            <div class="error-message" style="color: red; text-align: center; padding: 2rem;">
-                <h3>⚠️ Error</h3>
-                <p>@errorMessage</p>
-                <button @onclick="() => Navigation.Refresh()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #b45309; color: white; border: none; border-radius: 0.25rem; cursor: pointer;">
-                    Retry
-                </button>
-            </div>
-        }
-        else
-        {
-            <div class="recipes-list">
-                @foreach (var recipe in recipes)
-                {
-                    <div class="recipe-item" @onclick="() => NavigateToRecipe(recipe)">
-                        <div class="recipe-image">
-                            <img src="@recipe.ImageUrl" alt="@recipe.Title" loading="lazy" />
-                        </div>
-                        <div class="recipe-info">
-                            <h2 class="recipe-title">@recipe.Title</h2>
-                            <p class="recipe-description">@recipe.Description</p>
-                            <div class="recipe-details">
-                                <span class="detail-item">
-                                    <span class="detail-icon">🕒</span>
-                                    @recipe.TotalTime
-                                </span>
-                                <span class="detail-item">
-                                    <span class="detail-icon">@GetDifficultyEmoji(recipe.Difficulty)</span>
-                                    @recipe.Difficulty
-                                </span>
-                                <span class="detail-item">
-                                    <span class="detail-icon">🍽️</span>
-                                    @recipe.Servings
-                                </span>
-                            </div>
-                            <div class="recipe-tags">
-                                @foreach (var tag in recipe.Tags.Take(3))
-                                {
-                                    <span class="recipe-tag">@tag</span>
-                                }
-                            </div>
-                        </div>
-                        <div class="recipe-arrow">
-                            <span>→</span>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-    </div>
-</div>
-
 @code {
-    private List<Recipe> recipes = [];
-    private bool isLoading = true;
-    private string? errorMessage;
-
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        try
-        {
-            recipes = await RecipeService.GetAllRecipesAsync();
-            isLoading = false;
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Error loading recipes: {ex.Message}";
-            isLoading = false;
-            Console.WriteLine($"Home page error: {ex}");
-        }
-    }
-
-    private void NavigateToRecipe(Recipe recipe)
-    {
-        Navigation.NavigateTo($"/recipe/{recipe.Slug}");
-    }
-
-    private static string GetDifficultyEmoji(DifficultyLevel difficulty)
-    {
-        return difficulty switch
-        {
-            DifficultyLevel.Easy => "⭐",
-            DifficultyLevel.Medium => "⭐⭐",
-            DifficultyLevel.Hard => "⭐⭐⭐",
-            _ => "⭐"
-        };
+        Navigation.NavigateTo("/search", replace: true);
     }
 }

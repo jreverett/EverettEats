@@ -20,20 +20,22 @@ else if (recipe != null)
 
     <div class="recipe-detail">
         <div class="recipe-header">
-            <a href="/" class="back-btn">← Back to Recipes</a>
+            <a href="/search" class="back-btn">← Back to Recipes</a>
             <div class="recipe-actions">
                 <button class="share-btn" @onclick="ShareRecipe">
                     Share Recipe
                 </button>
             </div>
-        </div>
-
-        <div class="recipe-content">
+        </div>        <div class="recipe-content">
+            <div class="recipe-image">
+                <img src="@recipe.ImageUrl" alt="@recipe.Title" style="width: 100%; max-width: 400px; height: auto; border-radius: 0.5rem; margin: 0 auto; display: block;" />
+            </div>
+            
             <div class="recipe-info">
                 <h1 class="recipe-title">@recipe.Title</h1>
                 <p class="recipe-description">@recipe.Description</p>
 
-                <div class="recipe-meta">
+                <div class="recipe-meta" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 1rem 0;">
                     <div class="meta-item">
                         <span class="meta-label">Prep Time:</span>
                         <span>@recipe.PrepTime</span>
@@ -58,10 +60,6 @@ else if (recipe != null)
                         <span class="tag">@tag</span>
                     }
                 </div>
-            </div>
-
-            <div class="recipe-image">
-                <img src="@recipe.ImageUrl" alt="@recipe.Title" />
             </div>
         </div>
 

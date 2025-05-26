@@ -47,7 +47,35 @@ body {
     padding: 0 1rem;
 }
 
-/* Navigation */
+/* Site Header (for mobile-first design) */
+.site-header {
+    text-align: center;
+    padding: 2rem 0 1rem 0;
+    background: linear-gradient(135deg, var(--accent-lighter) 0%, #fff 100%);
+}
+
+.site-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.site-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.brand-icon {
+    font-size: 2rem;
+}
+
+/* Navigation (kept for reference but not used) */
 .navbar {
     background: white;
     box-shadow: var(--shadow);
@@ -417,12 +445,20 @@ a {
 .meta-item {
     display: flex;
     flex-direction: column;
+    min-width: 0; /* Prevents text from overflowing */
 }
 
 .meta-label {
     font-weight: bold;
     color: var(--primary-dark);
     font-size: 0.875rem;
+    white-space: nowrap;
+    margin-bottom: 0.25rem;
+}
+
+.meta-item span:not(.meta-label) {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .recipe-tags {
@@ -777,5 +813,42 @@ a {
 
     .recipe-item:hover .recipe-arrow {
         transform: rotate(90deg) translateX(4px);
+    }
+}
+
+/* Additional mobile optimizations */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 0.75rem;
+    }
+    
+    .site-header {
+        padding: 1.5rem 0 1rem 0;
+    }
+    
+    .site-title {
+        font-size: 1.75rem;
+    }
+    
+    .recipe-meta {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 0.75rem;
+    }
+    
+    .recipe-detail {
+        padding: 1rem;
+    }
+    
+    .recipe-header {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Ensure recipe meta works well on medium mobile screens */
+@media (min-width: 481px) and (max-width: 768px) {
+    .recipe-meta {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
     }
 }
