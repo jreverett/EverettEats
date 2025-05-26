@@ -18,15 +18,14 @@ else if (recipe != null)
     <meta property="og:image" content="@recipe.ImageUrl" />
     <meta property="og:type" content="article" />
 
-    <div class="recipe-detail">
-        <div class="recipe-header">
-            <a href="/search" class="back-btn">← Back to Recipes</a>
-            <div class="recipe-actions">
+    <div class="recipe-detail">        <div class="recipe-header">
+            <div class="button-group">
+                <a href="/search" class="back-btn">← Back to Recipes</a>
                 <button class="share-btn" @onclick="ShareRecipe">
-                    Share Recipe
+                    Share
                 </button>
             </div>
-        </div>        <div class="recipe-content">
+        </div><div class="recipe-content">
             <div class="recipe-image">
                 <img src="@recipe.ImageUrl" alt="@recipe.Title" style="width: 100%; max-width: 400px; height: auto; border-radius: 0.5rem; margin: 0 auto; display: block;" />
             </div>
