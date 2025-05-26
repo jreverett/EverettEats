@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using EverettEats.Client;
+using System.ComponentModel.DataAnnotations;
 
-namespace EverettEats.Models;
+namespace EverettEats.Client.Models;
 
 public class Recipe
 {

@@ -1,4 +1,4 @@
-﻿@page "/recipe/{slug}"
+@page "/recipe/{slug}"
 @rendermode RenderMode.InteractiveWebAssembly
 @using EverettEats.Client.Models
 @using EverettEats.Client.Services
@@ -20,7 +20,8 @@ else if (recipe != null)
 
     <div class="recipe-detail">
         <div class="recipe-header">
-            <a href="/" class="back-btn">← Back to Recipes</a>            <div class="recipe-actions">
+            <a href="/" class="back-btn">← Back to Recipes</a>
+            <div class="recipe-actions">
                 <button class="share-btn" @onclick="ShareRecipe">
                     Share Recipe
                 </button>
@@ -124,7 +125,9 @@ else
     {
         recipe = await RecipeService.GetRecipeBySlugAsync(Slug);
         isLoading = false;
-    }    private async Task ShareRecipe()
+    }
+
+    private async Task ShareRecipe()
     {
         if (recipe != null)
         {

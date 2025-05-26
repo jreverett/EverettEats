@@ -1,5 +1,5 @@
 using EverettEats.Components;
-using EverettEats.Services;
+using EverettEats.Client.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +33,8 @@ app.UseAntiforgery();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
-	.AddInteractiveServerRenderMode();
+	.AddInteractiveServerRenderMode()
+	.AddInteractiveWebAssemblyRenderMode()
+	.AddAdditionalAssemblies(typeof(EverettEats.Client._Imports).Assembly);
 
 app.Run();

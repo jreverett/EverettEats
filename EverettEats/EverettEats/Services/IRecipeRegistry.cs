@@ -1,4 +1,4 @@
-﻿using EverettEats.Enums;
+﻿using EverettEats.Client;
 
 namespace EverettEats.Services;
 

@@ -1,7 +1,6 @@
-﻿using EverettEats.Client;
-using EverettEats.Models;
+using EverettEats.Client.Models;
 
-namespace EverettEats.Services;
+namespace EverettEats.Client.Services;
 
 public interface IRecipeService
 {

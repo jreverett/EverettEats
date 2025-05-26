@@ -1,6 +1,5 @@
-﻿@page "/search"
+@page "/search"
 @rendermode RenderMode.InteractiveWebAssembly
-@using EverettEats.Client
 @using EverettEats.Client.Models
 @using EverettEats.Client.Services
 @inject IRecipeService RecipeService
@@ -34,7 +33,9 @@
                     </button>
                 }
             </div>
-        </div>        <div class="search-results">
+        </div>
+
+        <div class="search-results">
             @if (isLoading)
             {
                 <LoadingSpinner Text="Searching recipes..." />

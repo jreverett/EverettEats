@@ -1,6 +1,5 @@
-﻿@page "/"
+@page "/"
 @rendermode RenderMode.InteractiveWebAssembly
-@using EverettEats.Client
 @using EverettEats.Client.Models
 @using EverettEats.Client.Services
 @inject IRecipeService RecipeService
@@ -75,7 +74,9 @@
     private void NavigateToRecipe(Recipe recipe)
     {
         Navigation.NavigateTo($"/recipe/{recipe.Slug}");
-    }    private static string GetDifficultyEmoji(DifficultyLevel difficulty)
+    }
+
+    private static string GetDifficultyEmoji(DifficultyLevel difficulty)
     {
         return difficulty switch
         {

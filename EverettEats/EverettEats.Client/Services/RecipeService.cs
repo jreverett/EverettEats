@@ -1,7 +1,6 @@
-﻿using EverettEats.Client;
-using EverettEats.Models;
+using EverettEats.Client.Models;
 
-namespace EverettEats.Services;
+namespace EverettEats.Client.Services;
 
 public class RecipeService : IRecipeService
 {
@@ -22,7 +21,7 @@ public class RecipeService : IRecipeService
 		return Task.FromResult(_recipes.FirstOrDefault(r => r.Slug == slug));
 	}
 
-	public Task<List<Recipe>> GetRecipesByCategoryAsync(EverettEats.Client.RecipeCategory category)
+	public Task<List<Recipe>> GetRecipesByCategoryAsync(RecipeCategory category)
 	{
 		return Task.FromResult(_recipes.Where(r => r.Category == category).ToList());
 	}
@@ -39,7 +38,9 @@ public class RecipeService : IRecipeService
 		).ToList();
 
 		return Task.FromResult(results);
-	}	private static List<Recipe> GetSampleRecipes()
+	}
+
+	private static List<Recipe> GetSampleRecipes()
 	{
 		return
 		[

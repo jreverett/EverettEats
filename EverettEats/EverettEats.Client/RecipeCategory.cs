@@ -1,4 +1,4 @@
-﻿namespace EverettEats.Enums;
+namespace EverettEats.Client;
 
 public enum RecipeCategory
 {
