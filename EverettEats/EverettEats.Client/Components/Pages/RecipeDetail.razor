@@ -10,22 +10,26 @@
     <LoadingSpinner Text="Loading recipe..." />
 }
 else if (recipe != null)
-{
-    <PageTitle>@recipe.Title - Everett Eats</PageTitle>
-    <meta name="description" content="@recipe.Description" />
-    <meta property="og:title" content="@recipe.Title" />
-    <meta property="og:description" content="@recipe.Description" />
-    <meta property="og:image" content="@recipe.ImageUrl" />
-    <meta property="og:type" content="article" />
-
-    <div class="recipe-detail">        <div class="recipe-header">
+{    <PageTitle>@recipe.Title - Everett Eats</PageTitle>
+    <HeadContent>
+        <meta name="description" content="@recipe.Description" />
+        <meta property="og:title" content="@recipe.Title" />
+        <meta property="og:description" content="@recipe.Description" />
+        <meta property="og:image" content="@recipe.ImageUrl" />
+        <meta property="og:type" content="article" />
+    </HeadContent>
+    
+    <div class="recipe-detail">
+        <div class="recipe-header">
             <div class="button-group">
-                <a href="/search" class="back-btn">← Back to Recipes</a>
+                <a href="/" class="back-btn">← Back to Recipes</a>
                 <button class="share-btn" @onclick="ShareRecipe">
                     Share
                 </button>
             </div>
-        </div><div class="recipe-content">
+        </div>
+        
+        <div class="recipe-content">
             <div class="recipe-image">
                 <img src="@recipe.ImageUrl" alt="@recipe.Title" style="width: 100%; max-width: 400px; height: auto; border-radius: 0.5rem; margin: 0 auto; display: block;" />
             </div>
@@ -93,8 +97,7 @@ else if (recipe != null)
                             <li>@tip</li>
                         }
                     </ul>
-                </div>
-            }
+                </div>            }
         </div>
 
         <div class="recipe-footer">
@@ -116,9 +119,7 @@ else
     [Parameter] public string Slug { get; set; } = string.Empty;
 
     private Recipe? recipe;
-    private bool isLoading = true;
-
-    protected override async Task OnInitializedAsync()
+    private bool isLoading = true;    protected override async Task OnInitializedAsync()
     {
         recipe = await RecipeService.GetRecipeBySlugAsync(Slug);
         isLoading = false;
