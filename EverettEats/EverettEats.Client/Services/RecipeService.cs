@@ -1,16 +1,20 @@
 using EverettEats.Client.Models;
 using System.Net.Http.Json;
+using Microsoft.JSInterop;
 
 namespace EverettEats.Client.Services;
 
 public class RecipeService : IRecipeService
 {
 	private readonly HttpClient _httpClient;
+	private readonly IJSRuntime _jsRuntime;
 	private List<Recipe>? _recipes;
+	private const string RecipesCacheKey = "recipes_cache_v1";
 
-	public RecipeService(HttpClient httpClient)
+	public RecipeService(HttpClient httpClient, IJSRuntime jsRuntime)
 	{
 		_httpClient = httpClient;
+		_jsRuntime = jsRuntime;
 	}
 	public async Task<List<Recipe>> GetAllRecipesAsync()
 	{
@@ -54,17 +58,32 @@ public class RecipeService : IRecipeService
 
 	private async Task EnsureRecipesLoadedAsync()
 	{
-		if (_recipes == null)
+		if (_recipes != null) return;
+
+		// Try to load from localStorage first
+		var cached = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", RecipesCacheKey);
+		if (!string.IsNullOrEmpty(cached))
 		{
 			try
 			{
-				_recipes = await _httpClient.GetFromJsonAsync<List<Recipe>>("data/recipes.json") ?? [];
+				_recipes = System.Text.Json.JsonSerializer.Deserialize<List<Recipe>>(cached);
+			}
+			catch { _recipes = null; }
+		}
+
+		if (_recipes == null || _recipes.Count == 0)
+		{
+			try
+			{
+				_recipes = await _httpClient.GetFromJsonAsync<List<Recipe>>("data/recipes.json") ?? new List<Recipe>();
+				// Cache in localStorage
+				var json = System.Text.Json.JsonSerializer.Serialize(_recipes);
+				await _jsRuntime.InvokeVoidAsync("localStorage.setItem", RecipesCacheKey, json);
 			}
 			catch (Exception ex)
 			{
-				// Fallback to empty list if JSON loading fails
 				Console.WriteLine($"Failed to load recipes: {ex.Message}");
-				_recipes = [];
+				_recipes = new List<Recipe>();
 			}
 		}
 	}

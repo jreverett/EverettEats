@@ -14,7 +14,7 @@
                 <span class="brand-icon">🍽️</span>
                 Everett Eats
             </h1>
-            <p class="site-subtitle">Simple, delicious recipes made with love</p>
+            <p class="site-subtitle">Simple and delicious recipes</p>
         </div>
 
         <div class="search-controls">
@@ -91,12 +91,18 @@
     private string searchTerm = string.Empty;
     private RecipeCategory? selectedCategory;
     private bool isLoading = true;
+    private bool hasLoadedRecipes = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        allRecipes = await RecipeService.GetAllRecipesAsync();
-        filteredRecipes = allRecipes;
-        isLoading = false;
+        if (firstRender && !hasLoadedRecipes)
+        {
+            allRecipes = await RecipeService.GetAllRecipesAsync();
+            filteredRecipes = allRecipes;
+            isLoading = false;
+            hasLoadedRecipes = true;
+            StateHasChanged();
+        }
     }
 
     private async Task SearchRecipes()
@@ -104,8 +110,7 @@
         isLoading = true;
         StateHasChanged();
 
-        // Add small delay for better UX
-        await Task.Delay(100);
+        // Removed Task.Delay for performance
 
         if (string.IsNullOrWhiteSpace(searchTerm))
         {
