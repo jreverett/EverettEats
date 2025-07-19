@@ -1,11 +1,13 @@
-using EverettEats.Components;
+using EverettEats;
 using EverettEats.Services;
+using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
    .AddInteractiveServerComponents();
+
 // Enable response compression
 builder.Services.AddResponseCompression(options =>
 {
@@ -23,12 +25,25 @@ builder.Services.AddResponseCompression(options =>
 	];
 });
 
-// Register memory cache and recipe service
+// Register memory cache
 builder.Services.AddMemoryCache();
-builder.Services.AddScoped<IRecipeService, RecipeService>();
 
-// Add HTTP client if needed for server-side API calls
-builder.Services.AddHttpClient();
+// Register HttpClient with proper configuration for RecipeService
+builder.Services.AddHttpClient<IRecipeService, RecipeService>(client =>
+{
+    // For server-side Blazor, use the server's base address
+    client.BaseAddress = new Uri(builder.Configuration["BaseUrl"] ?? "https://localhost:5001/");
+});
+
+// Or if RecipeService loads data from static files:
+builder.Services.AddScoped<IRecipeService>(sp =>
+{
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+    var httpClient = httpClientFactory.CreateClient();
+    httpClient.BaseAddress = new Uri(builder.Configuration["BaseUrl"] ?? "https://localhost:5001/");
+    var cache = sp.GetRequiredService<IMemoryCache>();
+    return new RecipeService(httpClient, cache);
+});
 
 var app = builder.Build();
 
@@ -54,15 +69,22 @@ app.UseStaticFiles(new StaticFileOptions
 	{
 		var headers = ctx.Context.Response.Headers;
 		// Cache images, CSS, JS for 30 days
-		if (ctx.File.Name.EndsWith(".js") || ctx.File.Name.EndsWith(".css") || ctx.File.Name.EndsWith(".png") || ctx.File.Name.EndsWith(".jpg") || ctx.File.Name.EndsWith(".jpeg") || ctx.File.Name.EndsWith(".svg") || ctx.File.Name.EndsWith(".ico"))
+		if (ctx.File.Name.EndsWith(".js") || ctx.File.Name.EndsWith(".css") || 
+		    ctx.File.Name.EndsWith(".png") || ctx.File.Name.EndsWith(".jpg") || 
+		    ctx.File.Name.EndsWith(".jpeg") || ctx.File.Name.EndsWith(".svg") || 
+		    ctx.File.Name.EndsWith(".ico"))
 		{
 			headers["Cache-Control"] = "public,max-age=2592000"; // 30 days
 		}
 	}
 });
+
 // Enable response compression
 app.UseResponseCompression();
+
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode();
 
 app.Run();
+
+public partial class Program { }

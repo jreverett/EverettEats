@@ -1,3 +1,0 @@
-Move all contents (except the inner EverettEats folder itself) from /Users/jamieeverett/Documents/source/repos/EverettEats/EverettEats/EverettEats/ to /Users/jamieeverett/Documents/source/repos/EverettEats/.
-
-After moving, delete the now-empty /Users/jamieeverett/Documents/source/repos/EverettEats/EverettEats/ and /Users/jamieeverett/Documents/source/repos/EverettEats/EverettEats/EverettEats/ folders.
