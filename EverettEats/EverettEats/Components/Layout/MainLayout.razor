@@ -1,1 +1,31 @@
-// ...existing code from EverettEats.Client/Components/Layout/MainLayout.razor...
+@namespace EverettEats.Components.Layout
+@inherits LayoutComponentBase
+
+<div class="main-layout">
+	<header>
+		<h1>Everett Eats</h1>
+	</header>
+	<main>
+		@Body
+	</main>
+	<footer>
+		<p>&copy; 2025 Everett Eats</p>
+	</footer>
+</div>
+
+<style>
+.main-layout {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+header, footer {
+	background: #f3f4f6;
+	padding: 1rem;
+	text-align: center;
+}
+main {
+	flex: 1;
+	padding: 2rem 1rem;
+}
+</style>

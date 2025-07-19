@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components
+@using EverettEats.Components.Pages
+@using EverettEats.Components.Layout
+<!DOCTYPE html>
 <html lang="en">
 
 <head>    <meta charset="utf-8" />
@@ -21,7 +26,16 @@
 
 <body>
     <div id="app">
-        <Routes />
+        <ErrorBoundary>
+            <ChildContent>
+                <Routes />
+            </ChildContent>
+            <ErrorContent>
+                <LayoutView Layout="typeof(MainLayout)">
+                    <Error />
+                </LayoutView>
+            </ErrorContent>
+        </ErrorBoundary>
     </div>
     
     <script src="_framework/blazor.web.js"></script>
