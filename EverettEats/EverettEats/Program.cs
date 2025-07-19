@@ -1,17 +1,16 @@
 using EverettEats.Components;
-using EverettEats.Client.Services;
+using EverettEats.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-	.AddInteractiveServerComponents()
-	.AddInteractiveWebAssemblyComponents();
+	.AddInteractiveServerComponents();
 
 // Register recipe service
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 
-// Add HTTP client for client-side components
+// Add HTTP client if needed for server-side API calls
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
@@ -33,8 +32,6 @@ app.UseAntiforgery();
 
 app.UseStaticFiles();
 app.MapRazorComponents<App>()
-	.AddInteractiveServerRenderMode()
-	.AddInteractiveWebAssemblyRenderMode()
-	.AddAdditionalAssemblies(typeof(EverettEats.Client._Imports).Assembly);
+	.AddInteractiveServerRenderMode();
 
 app.Run();
