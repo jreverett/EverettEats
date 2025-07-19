@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
-// Register recipe service
+// Register memory cache and recipe service
+builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 // Add HTTP client if needed for server-side API calls
