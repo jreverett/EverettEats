@@ -1,6 +1,6 @@
-@page "/recipe/{Slug}"
 @using EverettEats.Models
 @using EverettEats.Services
+@page "/recipe/{Slug}"
 @inject NavigationManager Navigation
 @inject IRecipeService RecipeService
 
@@ -17,7 +17,7 @@
 
     private string GetRecipeJsonLd()
     {
-        if (recipe == null) return string.Empty;
+        if (recipe is null) return string.Empty;
         var sb = new System.Text.StringBuilder();
         sb.AppendLine("{");
         sb.AppendLine("  \"@context\": \"https://schema.org/\",");
@@ -57,9 +57,32 @@
     }
 }
 
-@if (recipe != null)
+@if (recipe is not null)
 {
     <script type="application/ld+json">
 @((MarkupString)GetRecipeJsonLd())
     </script>
+
+    <article class="recipe-detail">
+        <h1>@recipe.Title</h1>
+        @if (!string.IsNullOrWhiteSpace(recipe.ImageUrl))
+        {
+            <img src="@recipe.ImageUrl" alt="@recipe.Title" style="max-width:300px;max-height:300px;" />
+        }
+        <p>@recipe.Description</p>
+        <h2>Ingredients</h2>
+        <ul>
+            @foreach (var ingredient in recipe.Ingredients)
+            {
+                <li>@ingredient</li>
+            }
+        </ul>
+        <h2>Instructions</h2>
+        <ol>
+            @foreach (var step in recipe.Instructions)
+            {
+                <li>@step</li>
+            }
+        </ol>
+    </article>
 }
