@@ -5,7 +5,23 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-	.AddInteractiveServerComponents();
+   .AddInteractiveServerComponents();
+// Enable response compression
+builder.Services.AddResponseCompression(options =>
+{
+	options.EnableForHttps = true;
+	options.MimeTypes = [
+		"text/plain",
+		"text/css",
+		"application/javascript",
+		"text/html",
+		"application/xml",
+		"text/xml",
+		"application/json",
+		"text/json",
+		"image/svg+xml"
+	];
+});
 
 // Register memory cache and recipe service
 builder.Services.AddMemoryCache();
@@ -31,7 +47,21 @@ else
 app.UseHttpsRedirection();
 app.UseAntiforgery();
 
-app.UseStaticFiles();
+// Add browser caching headers for static assets
+app.UseStaticFiles(new StaticFileOptions
+{
+	OnPrepareResponse = ctx =>
+	{
+		var headers = ctx.Context.Response.Headers;
+		// Cache images, CSS, JS for 30 days
+		if (ctx.File.Name.EndsWith(".js") || ctx.File.Name.EndsWith(".css") || ctx.File.Name.EndsWith(".png") || ctx.File.Name.EndsWith(".jpg") || ctx.File.Name.EndsWith(".jpeg") || ctx.File.Name.EndsWith(".svg") || ctx.File.Name.EndsWith(".ico"))
+		{
+			headers["Cache-Control"] = "public,max-age=2592000"; // 30 days
+		}
+	}
+});
+// Enable response compression
+app.UseResponseCompression();
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode();
 
