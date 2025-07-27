@@ -5,26 +5,14 @@
 @inject IRecipeService RecipeService
 
 <div class="notebook-page home-page">
+    <div class="coffee-ring coffee-ring-hero"></div>
+    
     <div class="welcome-section">
         <h1 class="page-title">Welcome to my kitchen! 👋</h1>
         <p class="intro-text">
             This is where I keep all my favorite recipes. Some are family classics, 
             others are happy accidents. Feel free to browse around!
         </p>
-        <div class="doodle-wrapper">
-            <svg class="kitchen-doodle" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-                <!-- Simple hand-drawn style pot -->
-                <path d="M50 60 Q40 70 40 80 L80 80 Q80 70 70 60" 
-                      fill="none" stroke="var(--ink-blue)" stroke-width="2" stroke-linecap="round"/>
-                <line x1="35" y1="60" x2="85" y2="60" 
-                      stroke="var(--ink-blue)" stroke-width="2" stroke-linecap="round"/>
-                <path d="M60 50 Q60 45 60 40" 
-                      fill="none" stroke="var(--ink-blue)" stroke-width="2" stroke-linecap="round"/>
-                <!-- Steam -->
-                <path d="M45 35 Q47 30 45 25 M55 35 Q53 30 55 25 M65 35 Q67 30 65 25" 
-                      fill="none" stroke="var(--pencil-gray)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-            </svg>
-        </div>
     </div>
 
     <div class="search-section">
@@ -37,8 +25,10 @@
             <input type="text" 
                    @bind="searchTerm" 
                    @bind:event="oninput"
+                   @onfocus="OnSearchFocus"
+                   @onblur="OnSearchBlur"
                    placeholder="Try 'chocolate' or 'pasta'..." 
-                   class="search-input" />
+                   class="search-input @(isSearchFocused ? "focused" : "")" />
             <span class="search-icon">🔍</span>
         </div>
     </div>
@@ -99,6 +89,7 @@
 @code {
     private string searchTerm = "";
     private List<Recipe> recentRecipes = new();
+    private bool isSearchFocused = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -113,4 +104,14 @@
         DifficultyLevel.Hard => "💪 Challenge",
         _ => "👌 Easy"
     };
+    
+    private void OnSearchFocus()
+    {
+        isSearchFocused = true;
+    }
+    
+    private void OnSearchBlur()
+    {
+        isSearchFocused = false;
+    }
 }

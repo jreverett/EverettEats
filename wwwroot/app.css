@@ -58,7 +58,7 @@ body {
     position: relative;
 }
 
-/* Notebook Header */
+/* Notebook Header - Simplified for mobile */
 .notebook-header {
     background: var(--paper-white);
     border-bottom: 2px solid var(--paper-lines);
@@ -71,12 +71,11 @@ body {
 .header-content {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem 2rem;
+    padding: 0.75rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
+    position: relative;
 }
 
 .notebook-title {
@@ -99,6 +98,25 @@ body {
     color: var(--pencil-gray);
     display: block;
     margin-top: -0.5rem;
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.burger-line {
+    width: 25px;
+    height: 3px;
+    background: var(--ink-blue);
+    border-radius: 2px;
+    transition: all 0.3s ease;
 }
 
 /* Navigation Tabs */
@@ -144,12 +162,13 @@ body {
     pointer-events: none;
 }
 
-.coffee-ring-1 {
-    width: 80px;
-    height: 80px;
-    border: 3px solid var(--coffee-stain);
-    top: -10px;
-    right: -20px;
+.coffee-ring-hero {
+    width: 120px;
+    height: 120px;
+    border: 4px solid var(--coffee-stain);
+    top: 2rem;
+    right: 2rem;
+    opacity: 0.2;
 }
 
 .coffee-ring-small {
@@ -158,6 +177,11 @@ body {
     border: 2px solid var(--coffee-dark);
     bottom: 10px;
     right: 10px;
+}
+
+/* Remove coffee ring from header */
+.notebook-title .coffee-ring {
+    display: none;
 }
 
 /* Notebook Pages */
@@ -193,23 +217,28 @@ body {
     z-index: 1;
 }
 
+.home-page {
+    position: relative;
+}
+
 .welcome-section {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
 }
 
 .page-title {
     font-family: var(--font-handwritten);
     font-size: 2.5rem;
     color: var(--ink-blue);
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .intro-text {
     font-size: 1.1rem;
     color: var(--ink-black);
     max-width: 600px;
-    margin: 0 auto;
+    margin: 0 auto 0;
 }
 
 .kitchen-doodle {
@@ -248,6 +277,15 @@ body {
     position: relative;
     max-width: 500px;
     margin: 0 auto;
+    transition: transform 0.2s ease;
+}
+
+.search-wrapper:has(.search-input:focus) {
+    transform: scale(1.02);
+}
+
+.search-wrapper:has(.search-input:focus) .search-icon {
+    color: var(--ink-blue);
 }
 
 .search-input {
@@ -257,14 +295,28 @@ body {
     font-family: var(--font-readable);
     border: 2px dashed var(--pencil-gray);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.8);
+    background: transparent;
     transition: all 0.3s ease;
+    position: relative;
 }
 
-.search-input:focus {
+.search-input:hover {
+    border-color: var(--coffee-stain);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.search-input:focus,
+.search-input.focused {
     outline: none;
     border-color: var(--ink-blue);
-    background: white;
+    border-style: solid;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.1);
+}
+
+.search-input::placeholder {
+    color: var(--pencil-gray);
+    opacity: 0.7;
 }
 
 .search-icon {
@@ -273,6 +325,7 @@ body {
     top: 50%;
     transform: translateY(-50%);
     font-size: 1.5rem;
+    transition: color 0.3s ease;
 }
 
 /* Recipe Cards */
@@ -631,17 +684,56 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .header-content {
-        padding: 1rem;
+    .mobile-menu-toggle {
+        display: flex;
     }
     
     .notebook-tabs {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--paper-white);
+        border-bottom: 2px solid var(--paper-lines);
+        box-shadow: 0 4px 12px var(--shadow);
+        flex-direction: column;
+        padding: 1rem;
+        display: none;
+    }
+    
+    .notebook-tabs.mobile-open {
+        display: flex;
+    }
+    
+    .tab-link {
         width: 100%;
         justify-content: center;
+        padding: 0.75rem;
+    }
+    
+    .header-content {
+        padding: 0.75rem 1rem;
+    }
+    
+    .title-text {
+        font-size: 1.75rem;
+    }
+    
+    .title-subtitle {
+        font-size: 1rem;
+        margin-top: -0.25rem;
+    }
+    
+    .coffee-ring-hero {
+        width: 80px;
+        height: 80px;
+        top: 1rem;
+        right: 1rem;
+        border-width: 3px;
     }
     
     .tab-text {
-        display: none;
+        display: inline;
     }
     
     .recipe-cards {
@@ -659,7 +751,7 @@ body {
     }
     
     .notebook-pages {
-        padding: 1rem;
+        padding: 1.5rem 1rem;
     }
 }
 

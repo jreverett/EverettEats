@@ -7,19 +7,25 @@
             <a href="/" class="notebook-title">
                 <span class="title-text">Everett's</span>
                 <span class="title-subtitle">Recipe Notebook</span>
-                <div class="coffee-ring coffee-ring-1"></div>
             </a>
             
-            <nav class="notebook-tabs">
-                <a href="/" class="tab-link @(GetActiveClass("/"))">
+            <!-- Burger menu for mobile -->
+            <button class="mobile-menu-toggle" @onclick="ToggleMobileMenu" aria-label="Toggle menu">
+                <span class="burger-line"></span>
+                <span class="burger-line"></span>
+                <span class="burger-line"></span>
+            </button>
+            
+            <nav class="notebook-tabs @(isMobileMenuOpen ? "mobile-open" : "")">
+                <a href="/" class="tab-link @(GetActiveClass("/"))" @onclick="CloseMobileMenu">
                     <span class="tab-icon">🏠</span>
                     <span class="tab-text">Home</span>
                 </a>
-                <a href="/recipes" class="tab-link @(GetActiveClass("/recipes"))">
+                <a href="/recipes" class="tab-link @(GetActiveClass("/recipes"))" @onclick="CloseMobileMenu">
                     <span class="tab-icon">📖</span>
                     <span class="tab-text">All Recipes</span>
                 </a>
-                <a href="/favorites" class="tab-link @(GetActiveClass("/favorites"))">
+                <a href="/favorites" class="tab-link @(GetActiveClass("/favorites"))" @onclick="CloseMobileMenu">
                     <span class="tab-icon">❤️</span>
                     <span class="tab-text">Favorites</span>
                 </a>
@@ -39,10 +45,21 @@
 
 @code {
     [Inject] NavigationManager Navigation { get; set; } = default!;
+    private bool isMobileMenuOpen = false;
     
     private string GetActiveClass(string path)
     {
         var currentPath = Navigation.Uri.Replace(Navigation.BaseUri, "/");
         return currentPath.StartsWith(path) && (path != "/" || currentPath == "/") ? "active" : "";
+    }
+    
+    private void ToggleMobileMenu()
+    {
+        isMobileMenuOpen = !isMobileMenuOpen;
+    }
+    
+    private void CloseMobileMenu()
+    {
+        isMobileMenuOpen = false;
     }
 }
