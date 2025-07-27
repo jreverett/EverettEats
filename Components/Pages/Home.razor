@@ -1,0 +1,52 @@
+
+@page "/"
+
+<div class="container">
+	<h1 class="site-title">
+		<span class="brand-icon">🍽️</span>
+		Everett Eats
+	</h1>
+	<p class="site-subtitle">Simple and delicious recipes</p>
+
+	<div class="search-controls">
+		<input @bind="searchTerm" @bind:event="oninput" placeholder="Search recipes..." class="search-box" />
+		<label>
+			Page size:
+			<select @bind="pageSize">
+				@foreach (var size in pageSizeOptions)
+				{
+					<option value="@size">@size</option>
+				}
+			</select>
+		</label>
+	</div>
+
+	<div class="recipe-list">
+		@if (recipes.Count == 0)
+		{
+			<p>No recipes found.</p>
+		}
+		else
+		{
+			<ul>
+				@foreach (var recipe in recipes)
+				{
+					<li>
+						@if (!string.IsNullOrWhiteSpace(recipe.ImageUrl))
+						{
+							<img src="@recipe.ImageUrl" alt="@recipe.Title" loading="lazy" style="max-width:100px;max-height:100px;margin-right:1em;vertical-align:middle;" />
+						}
+						<b>@recipe.Title</b> - @recipe.Description
+					</li>
+				}
+			</ul>
+		}
+	</div>
+
+	<div class="pagination-controls">
+		<button @onclick="PreviousPage" disabled="@(pageNumber == 1)">Previous</button>
+		<span>Page @pageNumber of @totalPages</span>
+		<button @onclick="NextPage" disabled="@(pageNumber == totalPages)">Next</button>
+	</div>
+</div>
+

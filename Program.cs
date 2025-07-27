@@ -2,11 +2,13 @@ using EverettEats;
 using EverettEats.Services;
 using Microsoft.Extensions.Caching.Memory;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-   .AddInteractiveServerComponents();
+	.AddInteractiveServerComponents();
+builder.Services.AddRazorPages();
 
 // Enable response compression
 builder.Services.AddResponseCompression(options =>
@@ -31,18 +33,24 @@ builder.Services.AddMemoryCache();
 // Register HttpClient with proper configuration for RecipeService
 builder.Services.AddHttpClient<IRecipeService, RecipeService>(client =>
 {
-    // For server-side Blazor, use the server's base address
-    client.BaseAddress = new Uri(builder.Configuration["BaseUrl"] ?? "https://localhost:5001/");
+	// Use relative base address for static files
+	client.BaseAddress = new Uri("/", UriKind.RelativeOrAbsolute);
 });
 
-// Or if RecipeService loads data from static files:
+// Register HttpClient for accessing static files (recipes.json, etc.)
+builder.Services.AddScoped<HttpClient>(sp =>
+{
+	var navigationManager = sp.GetRequiredService<Microsoft.AspNetCore.Components.NavigationManager>();
+	return new HttpClient { BaseAddress = new Uri(navigationManager.BaseUri) };
+});
+
 builder.Services.AddScoped<IRecipeService>(sp =>
 {
-    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-    var httpClient = httpClientFactory.CreateClient();
-    httpClient.BaseAddress = new Uri(builder.Configuration["BaseUrl"] ?? "https://localhost:5001/");
-    var cache = sp.GetRequiredService<IMemoryCache>();
-    return new RecipeService(httpClient, cache);
+	var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+	var httpClient = httpClientFactory.CreateClient();
+	httpClient.BaseAddress = new Uri("/", UriKind.RelativeOrAbsolute);
+	var cache = sp.GetRequiredService<IMemoryCache>();
+	return new RecipeService(httpClient, cache);
 });
 
 var app = builder.Build();
@@ -82,9 +90,8 @@ app.UseStaticFiles(new StaticFileOptions
 // Enable response compression
 app.UseResponseCompression();
 
-app.MapRazorComponents<App>()
+app.MapRazorComponents<EverettEats.App>()
 	.AddInteractiveServerRenderMode();
 
-app.Run();
 
-public partial class Program { }
+app.Run();
