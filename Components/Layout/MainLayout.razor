@@ -1,57 +1,65 @@
 @namespace EverettEats.Components.Layout
 @inherits LayoutComponentBase
 
-<div class="main-layout">
-   <header class="header">
-	   <nav class="navbar">
-		   <div class="nav-brand">
-			   <i class="fas fa-utensils brand-icon"></i>
-			   <h1 class="brand-title">Everett Eats</h1>
-		   </div>
-		   <div class="nav-links">
-			   <a href="/" class="nav-link">
-				   <i class="fas fa-home"></i>
-				   Home
-			   </a>
-			   <a href="/recipes" class="nav-link">
-				   <i class="fas fa-book-open"></i>
-				   Recipes
-			   </a>
-			   <a href="/about" class="nav-link">
-				   <i class="fas fa-info-circle"></i>
-				   About
-			   </a>
-		   </div>
-	   </nav>
-   </header>
+<div class="notebook-layout">
+    <header class="notebook-header">
+        <div class="header-content">
+            <a href="/" class="notebook-title">
+                <span class="title-text">Everett's</span>
+                <span class="title-subtitle">Recipe Notebook</span>
+            </a>
+            
+            <!-- Burger menu for mobile -->
+            <button class="mobile-menu-toggle" @onclick="ToggleMobileMenu" aria-label="Toggle menu">
+                <span class="burger-line"></span>
+                <span class="burger-line"></span>
+                <span class="burger-line"></span>
+            </button>
+            
+            <nav class="notebook-tabs @(isMobileMenuOpen ? "mobile-open" : "")">
+                <a href="/" class="tab-link @(GetActiveClass("/"))" @onclick="CloseMobileMenu">
+                    <span class="tab-icon">🏠</span>
+                    <span class="tab-text">Home</span>
+                </a>
+                <a href="/recipes" class="tab-link @(GetActiveClass("/recipes"))" @onclick="CloseMobileMenu">
+                    <span class="tab-icon">📖</span>
+                    <span class="tab-text">All Recipes</span>
+                </a>
+                <a href="/favorites" class="tab-link @(GetActiveClass("/favorites"))" @onclick="CloseMobileMenu">
+                    <span class="tab-icon">❤️</span>
+                    <span class="tab-text">Favorites</span>
+                </a>
+            </nav>
+        </div>
+    </header>
 
-   <main class="main-content">
-	   @Body
-   </main>
+    <main class="notebook-pages">
+        <div class="page-lines"></div>
+        @Body
+    </main>
 
-   <footer class="footer">
-	   <div class="footer-content">
-		   <div class="footer-brand">
-			   <i class="fas fa-utensils footer-icon"></i>
-			   <h2 class="footer-title">Everett Eats</h2>
-		   </div>
-		   <p class="footer-text">
-			   Bringing delicious recipes to your kitchen, one dish at a time.
-		   </p>
-		   <div class="footer-social">
-			   <a href="#" class="social-link" aria-label="Facebook">
-				   <i class="fab fa-facebook-f"></i>
-			   </a>
-			   <a href="#" class="social-link" aria-label="Instagram">
-				   <i class="fab fa-instagram"></i>
-			   </a>
-			   <a href="#" class="social-link" aria-label="Twitter">
-				   <i class="fab fa-twitter"></i>
-			   </a>
-			   <a href="#" class="social-link" aria-label="Pinterest">
-				   <i class="fab fa-pinterest-p"></i>
-			   </a>
-		   </div>
-	   </div>
-   </footer>
+    <footer class="notebook-footer">
+        <p class="footer-note">Made with love (and flour-covered fingers) by the Everett family 👨‍👩‍👧‍👦</p>
+    </footer>
 </div>
+
+@code {
+    [Inject] NavigationManager Navigation { get; set; } = default!;
+    private bool isMobileMenuOpen = false;
+    
+    private string GetActiveClass(string path)
+    {
+        var currentPath = Navigation.Uri.Replace(Navigation.BaseUri, "/");
+        return currentPath.StartsWith(path) && (path != "/" || currentPath == "/") ? "active" : "";
+    }
+    
+    private void ToggleMobileMenu()
+    {
+        isMobileMenuOpen = !isMobileMenuOpen;
+    }
+    
+    private void CloseMobileMenu()
+    {
+        isMobileMenuOpen = false;
+    }
+}

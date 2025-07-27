@@ -1,13 +1,88 @@
+@page "/recipe/{Slug}"
 @using EverettEats.Models
 @using EverettEats.Services
-@page "/recipe/{Slug}"
-@inject NavigationManager Navigation
 @inject IRecipeService RecipeService
+@inject NavigationManager Navigation
+
+@if (recipe != null)
+{
+    <div class="recipe-detail-page">
+        <div class="recipe-header">
+            <button @onclick="GoBack" class="back-button">
+                ← Back to recipes
+            </button>
+            
+            <h1 class="recipe-title">@recipe.Title</h1>
+            
+            <div class="recipe-quick-info">
+                <span class="info-item">⏱️ Prep: @recipe.PrepTime</span>
+                <span class="info-item">🔥 Cook: @recipe.CookTime</span>
+                <span class="info-item">🍽️ Serves: @recipe.Servings</span>
+            </div>
+        </div>
+
+        <div class="recipe-content">
+            <div class="ingredients-section">
+                <h2 class="section-header">
+                    <span>Shopping List</span>
+                    <span class="pencil-mark">✓</span>
+                </h2>
+                
+                <ul class="ingredients-list">
+                    @foreach (var ingredient in recipe.Ingredients)
+                    {
+                        <li class="ingredient-item">
+                            <input type="checkbox" id="ing-@ingredient.GetHashCode()" class="ingredient-checkbox" />
+                            <label for="ing-@ingredient.GetHashCode()">@ingredient</label>
+                        </li>
+                    }
+                </ul>
+                
+                <div class="sticky-note">
+                    <p class="note-text">Don't forget to check the pantry first! 😊</p>
+                </div>
+            </div>
+
+            <div class="instructions-section">
+                <h2 class="section-header">
+                    <span>Let's Cook!</span>
+                    <span class="doodle-arrow">↓</span>
+                </h2>
+                
+                <ol class="instructions-list">
+                    @foreach (var instruction in recipe.Instructions)
+                    {
+                        <li class="instruction-item">
+                            <p>@instruction</p>
+                        </li>
+                    }
+                </ol>
+                
+                @if (recipe.Tips.Any())
+                {
+                    <div class="tips-section">
+                        <h3 class="tips-header">💡 Notes to Self:</h3>
+                        <ul class="tips-list">
+                            @foreach (var tip in recipe.Tips)
+                            {
+                                <li class="tip-item">@tip</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="loading-state">
+        <p>Looking for that recipe... 📖</p>
+    </div>
+}
 
 @code {
-    [Parameter]
-    public string Slug { get; set; } = string.Empty;
-
+    [Parameter] public string Slug { get; set; } = "";
     private Recipe? recipe;
 
     protected override async Task OnInitializedAsync()
@@ -15,74 +90,8 @@
         recipe = await RecipeService.GetRecipeBySlugAsync(Slug);
     }
 
-    private string GetRecipeJsonLd()
+    private void GoBack()
     {
-        if (recipe is null) return string.Empty;
-        var sb = new System.Text.StringBuilder();
-        sb.AppendLine("{");
-        sb.AppendLine("  \"@context\": \"https://schema.org/\",");
-        sb.AppendLine("  \"@type\": \"Recipe\",");
-        sb.AppendLine($"  \"name\": \"{recipe.Title}\",");
-        sb.AppendLine($"  \"description\": \"{recipe.Description}\",");
-        sb.AppendLine($"  \"image\": [\"{Navigation.BaseUri}{recipe.ImageUrl}\"],");
-        sb.AppendLine($"  \"datePublished\": \"{recipe.DateAdded:yyyy-MM-dd}\",");
-        sb.AppendLine("  \"author\": { \"@type\": \"Person\", \"name\": \"Jamie Everett\" },");
-        sb.AppendLine($"  \"recipeCategory\": \"{recipe.Category}\",");
-        sb.AppendLine("  \"recipeCuisine\": \"\",");
-        sb.AppendLine($"  \"keywords\": \"{string.Join(", ", recipe.Tags)}\",");
-        sb.AppendLine($"  \"recipeYield\": \"{recipe.Servings}\",");
-        sb.AppendLine($"  \"prepTime\": \"{recipe.PrepTime}\",");
-        sb.AppendLine($"  \"cookTime\": \"{recipe.CookTime}\",");
-        sb.AppendLine($"  \"totalTime\": \"{recipe.TotalTime}\",");
-        sb.AppendLine("  \"recipeIngredient\": [");
-        for (int i = 0; i < recipe.Ingredients.Count; i++)
-        {
-            var ingredient = recipe.Ingredients[i].Replace("\"", "\\\"");
-            sb.Append($"    \"{ingredient}\"");
-            if (i < recipe.Ingredients.Count - 1) sb.Append(",");
-            sb.AppendLine();
-        }
-        sb.AppendLine("  ],");
-        sb.AppendLine("  \"recipeInstructions\": [");
-        for (int i = 0; i < recipe.Instructions.Count; i++)
-        {
-            var step = recipe.Instructions[i].Replace("\"", "\\\"");
-            sb.Append($"    {{ \"@type\": \"HowToStep\", \"text\": \"{step}\" }}");
-            if (i < recipe.Instructions.Count - 1) sb.Append(",");
-            sb.AppendLine();
-        }
-        sb.AppendLine("  ]");
-        sb.AppendLine("}");
-        return sb.ToString();
+        Navigation.NavigateTo("/");
     }
-}
-
-@if (recipe is not null)
-{
-    <script type="application/ld+json">
-@((MarkupString)GetRecipeJsonLd())
-    </script>
-
-    <article class="recipe-detail">
-        <h1>@recipe.Title</h1>
-        @if (!string.IsNullOrWhiteSpace(recipe.ImageUrl))
-        {
-            <img src="@recipe.ImageUrl" alt="@recipe.Title" style="max-width:300px;max-height:300px;" />
-        }
-        <p>@recipe.Description</p>
-        <h2>Ingredients</h2>
-        <ul>
-            @foreach (var ingredient in recipe.Ingredients)
-            {
-                <li>@ingredient</li>
-            }
-        </ul>
-        <h2>Instructions</h2>
-        <ol>
-            @foreach (var step in recipe.Instructions)
-            {
-                <li>@step</li>
-            }
-        </ol>
-    </article>
 }
