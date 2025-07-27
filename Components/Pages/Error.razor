@@ -1,0 +1,32 @@
+@using EverettEats.Components.Layout
+@page "/Error"
+@layout MainLayout
+
+<div class="error-page">
+	<h1>Something went wrong.</h1>
+	<p>Sorry, but an unexpected error has occurred.</p>
+	<p>Please try refreshing the page, or <a href="/">return to the homepage</a>.</p>
+	<p>If the problem persists, contact support.</p>
+</div>
+
+<style>
+.error-page {
+	max-width: 600px;
+	margin: 4rem auto;
+	padding: 2rem;
+	background: #fff3cd;
+	border: 1px solid #ffeeba;
+	border-radius: 8px;
+	text-align: center;
+	color: #856404;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.error-page h1 {
+	font-size: 2.5rem;
+	margin-bottom: 1rem;
+}
+.error-page a {
+	color: #b45309;
+	text-decoration: underline;
+}
+</style>

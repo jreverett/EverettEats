@@ -1,0 +1,88 @@
+@using EverettEats.Models
+@using EverettEats.Services
+@page "/recipe/{Slug}"
+@inject NavigationManager Navigation
+@inject IRecipeService RecipeService
+
+@code {
+    [Parameter]
+    public string Slug { get; set; } = string.Empty;
+
+    private Recipe? recipe;
+
+    protected override async Task OnInitializedAsync()
+    {
+        recipe = await RecipeService.GetRecipeBySlugAsync(Slug);
+    }
+
+    private string GetRecipeJsonLd()
+    {
+        if (recipe is null) return string.Empty;
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine("{");
+        sb.AppendLine("  \"@context\": \"https://schema.org/\",");
+        sb.AppendLine("  \"@type\": \"Recipe\",");
+        sb.AppendLine($"  \"name\": \"{recipe.Title}\",");
+        sb.AppendLine($"  \"description\": \"{recipe.Description}\",");
+        sb.AppendLine($"  \"image\": [\"{Navigation.BaseUri}{recipe.ImageUrl}\"],");
+        sb.AppendLine($"  \"datePublished\": \"{recipe.DateAdded:yyyy-MM-dd}\",");
+        sb.AppendLine("  \"author\": { \"@type\": \"Person\", \"name\": \"Jamie Everett\" },");
+        sb.AppendLine($"  \"recipeCategory\": \"{recipe.Category}\",");
+        sb.AppendLine("  \"recipeCuisine\": \"\",");
+        sb.AppendLine($"  \"keywords\": \"{string.Join(", ", recipe.Tags)}\",");
+        sb.AppendLine($"  \"recipeYield\": \"{recipe.Servings}\",");
+        sb.AppendLine($"  \"prepTime\": \"{recipe.PrepTime}\",");
+        sb.AppendLine($"  \"cookTime\": \"{recipe.CookTime}\",");
+        sb.AppendLine($"  \"totalTime\": \"{recipe.TotalTime}\",");
+        sb.AppendLine("  \"recipeIngredient\": [");
+        for (int i = 0; i < recipe.Ingredients.Count; i++)
+        {
+            var ingredient = recipe.Ingredients[i].Replace("\"", "\\\"");
+            sb.Append($"    \"{ingredient}\"");
+            if (i < recipe.Ingredients.Count - 1) sb.Append(",");
+            sb.AppendLine();
+        }
+        sb.AppendLine("  ],");
+        sb.AppendLine("  \"recipeInstructions\": [");
+        for (int i = 0; i < recipe.Instructions.Count; i++)
+        {
+            var step = recipe.Instructions[i].Replace("\"", "\\\"");
+            sb.Append($"    {{ \"@type\": \"HowToStep\", \"text\": \"{step}\" }}");
+            if (i < recipe.Instructions.Count - 1) sb.Append(",");
+            sb.AppendLine();
+        }
+        sb.AppendLine("  ]");
+        sb.AppendLine("}");
+        return sb.ToString();
+    }
+}
+
+@if (recipe is not null)
+{
+    <script type="application/ld+json">
+@((MarkupString)GetRecipeJsonLd())
+    </script>
+
+    <article class="recipe-detail">
+        <h1>@recipe.Title</h1>
+        @if (!string.IsNullOrWhiteSpace(recipe.ImageUrl))
+        {
+            <img src="@recipe.ImageUrl" alt="@recipe.Title" style="max-width:300px;max-height:300px;" />
+        }
+        <p>@recipe.Description</p>
+        <h2>Ingredients</h2>
+        <ul>
+            @foreach (var ingredient in recipe.Ingredients)
+            {
+                <li>@ingredient</li>
+            }
+        </ul>
+        <h2>Instructions</h2>
+        <ol>
+            @foreach (var step in recipe.Instructions)
+            {
+                <li>@step</li>
+            }
+        </ol>
+    </article>
+}

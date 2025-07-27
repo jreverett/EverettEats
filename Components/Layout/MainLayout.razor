@@ -1,0 +1,57 @@
+@namespace EverettEats.Components.Layout
+@inherits LayoutComponentBase
+
+<div class="main-layout">
+   <header class="header">
+	   <nav class="navbar">
+		   <div class="nav-brand">
+			   <i class="fas fa-utensils brand-icon"></i>
+			   <h1 class="brand-title">Everett Eats</h1>
+		   </div>
+		   <div class="nav-links">
+			   <a href="/" class="nav-link">
+				   <i class="fas fa-home"></i>
+				   Home
+			   </a>
+			   <a href="/recipes" class="nav-link">
+				   <i class="fas fa-book-open"></i>
+				   Recipes
+			   </a>
+			   <a href="/about" class="nav-link">
+				   <i class="fas fa-info-circle"></i>
+				   About
+			   </a>
+		   </div>
+	   </nav>
+   </header>
+
+   <main class="main-content">
+	   @Body
+   </main>
+
+   <footer class="footer">
+	   <div class="footer-content">
+		   <div class="footer-brand">
+			   <i class="fas fa-utensils footer-icon"></i>
+			   <h2 class="footer-title">Everett Eats</h2>
+		   </div>
+		   <p class="footer-text">
+			   Bringing delicious recipes to your kitchen, one dish at a time.
+		   </p>
+		   <div class="footer-social">
+			   <a href="#" class="social-link" aria-label="Facebook">
+				   <i class="fab fa-facebook-f"></i>
+			   </a>
+			   <a href="#" class="social-link" aria-label="Instagram">
+				   <i class="fab fa-instagram"></i>
+			   </a>
+			   <a href="#" class="social-link" aria-label="Twitter">
+				   <i class="fab fa-twitter"></i>
+			   </a>
+			   <a href="#" class="social-link" aria-label="Pinterest">
+				   <i class="fab fa-pinterest-p"></i>
+			   </a>
+		   </div>
+	   </div>
+   </footer>
+</div>

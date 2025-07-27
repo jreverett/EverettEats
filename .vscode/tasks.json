@@ -1,0 +1,11 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Clean all build artifacts",
+			"command": "rm -rf bin obj EverettEats.Tests/bin EverettEats.Tests/obj",
+			"group": "build"
+		}
+	]
+}

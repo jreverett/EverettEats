@@ -1,0 +1,39 @@
+@using Microsoft.AspNetCore.Components.Web
+@namespace EverettEats.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Everett Eats - Delicious Recipes for Every Occasion</title>
+    <base href="~/" />
+    
+    <!-- Preconnect to external domains for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- App Styles - Use tilde for proper path resolution -->
+    <link rel="stylesheet" href="~/app.css" />
+    <link rel="stylesheet" href="~/EverettEats.styles.css" />
+    
+    <!-- Meta tags for SEO and PWA -->
+    <meta name="description" content="Discover delicious recipes for every occasion at Everett Eats. From appetizers to desserts, find your next favorite dish.">
+    <meta name="theme-color" content="#2d5016">
+    
+    <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
+</head>
+<body>
+    @RenderBody()
+
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>
