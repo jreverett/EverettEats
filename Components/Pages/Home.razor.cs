@@ -79,4 +79,37 @@ public partial class Home : ComponentBase
         pageNumber = 1;
         await LoadRecipesAsync();
     }
+
+    protected async Task ClearSearch()
+    {
+        searchTerm = string.Empty;
+        pageNumber = 1;
+        await LoadRecipesAsync();
+    }
+
+    protected string GetDifficultyText(DifficultyLevel difficulty)
+    {
+        return difficulty switch
+        {
+            DifficultyLevel.Easy => "Easy",
+            DifficultyLevel.Medium => "Medium",
+            DifficultyLevel.Hard => "Hard",
+            _ => "Unknown"
+        };
+    }
+
+    protected string GetCategoryText(RecipeCategory category)
+    {
+        return category switch
+        {
+            RecipeCategory.Appetizers => "Appetizers",
+            RecipeCategory.MainDishes => "Main Dishes",
+            RecipeCategory.Desserts => "Desserts",
+            RecipeCategory.Beverages => "Beverages",
+            RecipeCategory.Breakfast => "Breakfast",
+            RecipeCategory.Sides => "Sides",
+            RecipeCategory.Snacks => "Snacks",
+            _ => "Other"
+        };
+    }
 }

@@ -1,58 +1,57 @@
 @namespace EverettEats.Components.Layout
 @inherits LayoutComponentBase
 
-
-<head>
-	<title>Everett Eats - Delicious Homemade Recipes</title>
-	<!-- SEO Meta Tags -->
-	<meta name="description" content="Discover delicious homemade recipes for every occasion at Everett Eats. Search, browse, and enjoy easy-to-follow recipes for all skill levels." />
-	<meta name="keywords" content="recipes, cooking, homemade, Everett Eats, food, easy recipes, healthy, dinner, dessert" />
-	<meta name="author" content="Everett Eats" />
-	<link rel="canonical" href="https://everetteats.com/" />
-	<!-- Open Graph Meta Tags -->
-	<meta property="og:title" content="Everett Eats - Delicious Homemade Recipes" />
-	<meta property="og:description" content="Discover delicious homemade recipes for every occasion at Everett Eats." />
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://everetteats.com/" />
-	<meta property="og:image" content="https://everetteats.com/icon-512.png" />
-	<meta property="og:site_name" content="Everett Eats" />
-	<!-- Twitter Card Meta Tags -->
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Everett Eats - Delicious Homemade Recipes" />
-	<meta name="twitter:description" content="Discover delicious homemade recipes for every occasion at Everett Eats." />
-	<meta name="twitter:image" content="https://everetteats.com/icon-512.png" />
-</head>
-
-
 <div class="main-layout">
-   <header>
-	   <h1>Everett Eats</h1>
-	   <nav aria-label="Main navigation">
-		   <a href="/">Home</a>
-		   <a href="/search">Search</a>
+   <header class="header">
+	   <nav class="navbar">
+		   <div class="nav-brand">
+			   <i class="fas fa-utensils brand-icon"></i>
+			   <h1 class="brand-title">Everett Eats</h1>
+		   </div>
+		   <div class="nav-links">
+			   <a href="/" class="nav-link">
+				   <i class="fas fa-home"></i>
+				   Home
+			   </a>
+			   <a href="/recipes" class="nav-link">
+				   <i class="fas fa-book-open"></i>
+				   Recipes
+			   </a>
+			   <a href="/about" class="nav-link">
+				   <i class="fas fa-info-circle"></i>
+				   About
+			   </a>
+		   </div>
 	   </nav>
    </header>
-   <main role="main">
+
+   <main class="main-content">
 	   @Body
    </main>
-   <footer>
-	   <p>&copy; 2025 Everett Eats</p>
+
+   <footer class="footer">
+	   <div class="footer-content">
+		   <div class="footer-brand">
+			   <i class="fas fa-utensils footer-icon"></i>
+			   <h2 class="footer-title">Everett Eats</h2>
+		   </div>
+		   <p class="footer-text">
+			   Bringing delicious recipes to your kitchen, one dish at a time.
+		   </p>
+		   <div class="footer-social">
+			   <a href="#" class="social-link" aria-label="Facebook">
+				   <i class="fab fa-facebook-f"></i>
+			   </a>
+			   <a href="#" class="social-link" aria-label="Instagram">
+				   <i class="fab fa-instagram"></i>
+			   </a>
+			   <a href="#" class="social-link" aria-label="Twitter">
+				   <i class="fab fa-twitter"></i>
+			   </a>
+			   <a href="#" class="social-link" aria-label="Pinterest">
+				   <i class="fab fa-pinterest-p"></i>
+			   </a>
+		   </div>
+	   </div>
    </footer>
 </div>
-
-<style>
-.main-layout {
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-}
-header, footer {
-	background: #f3f4f6;
-	padding: 1rem;
-	text-align: center;
-}
-main {
-	flex: 1;
-	padding: 2rem 1rem;
-}
-</style>

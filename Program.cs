@@ -2,93 +2,56 @@ using EverettEats;
 using EverettEats.Services;
 using Microsoft.Extensions.Caching.Memory;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorComponents()
-	.AddInteractiveServerComponents();
 builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
 
 // Enable response compression
 builder.Services.AddResponseCompression(options =>
 {
-	options.EnableForHttps = true;
-	options.MimeTypes = [
-		"text/plain",
-		"text/css",
-		"application/javascript",
-		"text/html",
-		"application/xml",
-		"text/xml",
-		"application/json",
-		"text/json",
-		"image/svg+xml"
-	];
+    options.EnableForHttps = true;
 });
 
 // Register memory cache
 builder.Services.AddMemoryCache();
 
-// Register HttpClient with proper configuration for RecipeService
-builder.Services.AddHttpClient<IRecipeService, RecipeService>();
-
 // Register HttpClient for accessing static files (recipes.json, etc.)
 builder.Services.AddScoped<HttpClient>(sp =>
 {
-	var navigationManager = sp.GetRequiredService<Microsoft.AspNetCore.Components.NavigationManager>();
-	return new HttpClient { BaseAddress = new Uri(navigationManager.BaseUri) };
+    var navigationManager = sp.GetRequiredService<Microsoft.AspNetCore.Components.NavigationManager>();
+    return new HttpClient { BaseAddress = new Uri(navigationManager.BaseUri) };
 });
 
 builder.Services.AddScoped<IRecipeService>(sp =>
 {
-	var navigationManager = sp.GetRequiredService<Microsoft.AspNetCore.Components.NavigationManager>();
-	var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-	var httpClient = httpClientFactory.CreateClient();
-	httpClient.BaseAddress = new Uri(navigationManager.BaseUri);
-	var cache = sp.GetRequiredService<IMemoryCache>();
-	return new RecipeService(httpClient, cache);
+    var navigationManager = sp.GetRequiredService<Microsoft.AspNetCore.Components.NavigationManager>();
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    var cache = sp.GetRequiredService<IMemoryCache>();
+    return new RecipeService(httpClient, cache);
 });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment())
 {
-	app.UseWebAssemblyDebugging();
-}
-else
-{
-	app.UseExceptionHandler("/Error", createScopeForErrors: true);
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-	app.UseHsts();
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-app.UseAntiforgery();
 
-// Add browser caching headers for static assets
-app.UseStaticFiles(new StaticFileOptions
-{
-	OnPrepareResponse = ctx =>
-	{
-		var headers = ctx.Context.Response.Headers;
-		// Cache images, CSS, JS for 30 days
-		if (ctx.File.Name.EndsWith(".js") || ctx.File.Name.EndsWith(".css") || 
-		    ctx.File.Name.EndsWith(".png") || ctx.File.Name.EndsWith(".jpg") || 
-		    ctx.File.Name.EndsWith(".jpeg") || ctx.File.Name.EndsWith(".svg") || 
-		    ctx.File.Name.EndsWith(".ico"))
-		{
-			headers["Cache-Control"] = "public,max-age=2592000"; // 30 days
-		}
-	}
-});
+// IMPORTANT: UseStaticFiles must come before UseRouting
+app.UseStaticFiles();
+
+app.UseRouting();
 
 // Enable response compression
 app.UseResponseCompression();
 
-app.MapRazorComponents<EverettEats.App>()
-	.AddInteractiveServerRenderMode();
-
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
 
 app.Run();
