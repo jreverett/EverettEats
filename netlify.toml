@@ -1,5 +1,5 @@
 [build]
-  base = "EverettEats/EverettEats"
+  base = ""
   command = "dotnet publish -c Release -o publish"
   publish = "publish/wwwroot"
 
