@@ -31,11 +31,7 @@ builder.Services.AddResponseCompression(options =>
 builder.Services.AddMemoryCache();
 
 // Register HttpClient with proper configuration for RecipeService
-builder.Services.AddHttpClient<IRecipeService, RecipeService>(client =>
-{
-	// Use relative base address for static files
-	client.BaseAddress = new Uri("/", UriKind.RelativeOrAbsolute);
-});
+builder.Services.AddHttpClient<IRecipeService, RecipeService>();
 
 // Register HttpClient for accessing static files (recipes.json, etc.)
 builder.Services.AddScoped<HttpClient>(sp =>
@@ -46,9 +42,10 @@ builder.Services.AddScoped<HttpClient>(sp =>
 
 builder.Services.AddScoped<IRecipeService>(sp =>
 {
+	var navigationManager = sp.GetRequiredService<Microsoft.AspNetCore.Components.NavigationManager>();
 	var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
 	var httpClient = httpClientFactory.CreateClient();
-	httpClient.BaseAddress = new Uri("/", UriKind.RelativeOrAbsolute);
+	httpClient.BaseAddress = new Uri(navigationManager.BaseUri);
 	var cache = sp.GetRequiredService<IMemoryCache>();
 	return new RecipeService(httpClient, cache);
 });
