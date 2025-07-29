@@ -3,13 +3,9 @@ name: Deploy to Azure
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-    types: [closed]
 
 jobs:
   build-and-deploy:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
 
     steps:
@@ -22,9 +18,9 @@ jobs:
     
     - name: Build and Publish
       run: |
-        dotnet restore
-        dotnet build --configuration Release
         dotnet publish -c Release -o ./publish
+        cd publish
+        ls -la  # Debug: see what files are here
     
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
@@ -32,4 +28,4 @@ jobs:
         app-name: 'everetteats'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: './publish'
-        type: 'ZIP'
+        startup-command: 'dotnet EverettEats.dll'
