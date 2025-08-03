@@ -44,10 +44,10 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_PRIVATE_KEY }}
         script: |
-          systemctl stop everetteats
+          sudo systemctl stop everetteats
           rm -rf /var/www/everetteats/*
           mv /tmp/everetteats-deploy/publish/* /var/www/everetteats/
-          chown -R everetteats:everetteats /var/www/everetteats
-          systemctl start everetteats
+          sudo chown -R everetteats:everetteats /var/www/everetteats
+          sudo systemctl start everetteats
           rm -rf /tmp/everetteats-deploy
           echo "Deployment completed at $(date)"
