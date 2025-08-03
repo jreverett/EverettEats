@@ -1,0 +1,53 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore
+    
+    - name: Publish
+      run: dotnet publish -c Release -o ./publish --self-contained false
+    
+    - name: Deploy to VPS
+      uses: appleboy/scp-action@v0.1.5
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_PRIVATE_KEY }}
+        source: "./publish/*"
+        target: "/tmp/everetteats-deploy"
+        rm: true
+    
+    - name: Update app on VPS
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_PRIVATE_KEY }}
+        script: |
+          systemctl stop everetteats
+          rm -rf /var/www/everetteats/*
+          mv /tmp/everetteats-deploy/publish/* /var/www/everetteats/
+          chown -R everetteats:everetteats /var/www/everetteats
+          systemctl start everetteats
+          rm -rf /tmp/everetteats-deploy
+          echo "Deployment completed at $(date)"
