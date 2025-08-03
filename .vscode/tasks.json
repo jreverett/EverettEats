@@ -6,6 +6,12 @@
 			"label": "Clean all build artifacts",
 			"command": "rm -rf bin obj EverettEats.Tests/bin EverettEats.Tests/obj",
 			"group": "build"
+		},
+		{
+			"label": "Run with Hot Reload (dotnet watch)",
+			"type": "shell",
+			"command": "dotnet watch run",
+			"group": "build"
 		}
 	]
 }
