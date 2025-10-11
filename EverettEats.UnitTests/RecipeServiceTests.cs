@@ -1,6 +1,7 @@
 using EverettEats.Models;
 using EverettEats.Services;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Hosting;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,9 @@ public class RecipeServiceTests
             BaseAddress = new Uri("http://localhost/")
         };
         var cache = new MemoryCache(new MemoryCacheOptions());
-        var service = new RecipeService(httpClient, cache);
+        var mockEnv = new Mock<IWebHostEnvironment>();
+        mockEnv.Setup(e => e.WebRootPath).Returns("/tmp");
+        var service = new RecipeService(httpClient, cache, mockEnv.Object);
         if (recipes != null)
         {
             cache.Set("recipes_cache_v1", recipes);

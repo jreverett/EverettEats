@@ -17,20 +17,20 @@ builder.Services.AddResponseCompression(options =>
 // Register memory cache
 builder.Services.AddMemoryCache();
 
+// Register HttpClient factory
+builder.Services.AddHttpClient();
+
 // Register HttpClient for accessing static files (recipes.json, etc.)
 builder.Services.AddScoped<HttpClient>(sp =>
 {
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
     var navigationManager = sp.GetRequiredService<Microsoft.AspNetCore.Components.NavigationManager>();
-    return new HttpClient { BaseAddress = new Uri(navigationManager.BaseUri) };
+    var client = httpClientFactory.CreateClient();
+    client.BaseAddress = new Uri(navigationManager.BaseUri);
+    return client;
 });
 
-builder.Services.AddScoped<IRecipeService>(sp =>
-{
-    var navigationManager = sp.GetRequiredService<Microsoft.AspNetCore.Components.NavigationManager>();
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    var cache = sp.GetRequiredService<IMemoryCache>();
-    return new RecipeService(httpClient, cache);
-});
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 var app = builder.Build();
 

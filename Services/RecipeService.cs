@@ -1,5 +1,6 @@
 using EverettEats.Models;
 using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace EverettEats.Services
@@ -8,13 +9,15 @@ namespace EverettEats.Services
 	{
 		private readonly HttpClient _httpClient;
 		private readonly IMemoryCache _cache;
+		private readonly IWebHostEnvironment _env;
 		private const string RecipesCacheKey = "recipes_cache_v1";
 		private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(30);
 
-		public RecipeService(HttpClient httpClient, IMemoryCache cache)
+		public RecipeService(HttpClient httpClient, IMemoryCache cache, IWebHostEnvironment env)
 		{
 			_httpClient = httpClient;
 			_cache = cache;
+			_env = env;
 		}
 
 		public async Task<List<Recipe>> GetAllRecipesAsync()
@@ -87,11 +90,43 @@ namespace EverettEats.Services
 			{
 				try
 				{
-					recipes = await _httpClient.GetFromJsonAsync<List<Recipe>>("data/recipes.json") ?? new List<Recipe>();
+					// Try loading from file system first (more reliable during prerendering)
+					var filePath = Path.Combine(_env.WebRootPath, "data", "recipes.json");
+					Console.WriteLine($"Loading recipes from file: {filePath}");
+
+					if (File.Exists(filePath))
+					{
+						var json = await File.ReadAllTextAsync(filePath);
+						var options = new JsonSerializerOptions
+						{
+							PropertyNameCaseInsensitive = true
+						};
+						recipes = JsonSerializer.Deserialize<List<Recipe>>(json, options) ?? new List<Recipe>();
+						Console.WriteLine($"Successfully loaded {recipes.Count} recipes from file system");
+						if (recipes.Count > 0)
+						{
+							Console.WriteLine($"First recipe: Id={recipes[0].Id}, Title={recipes[0].Title}, Slug={recipes[0].Slug}");
+						}
+					}
+					else
+					{
+						Console.WriteLine($"File not found, trying HTTP: {_httpClient.BaseAddress}data/recipes.json");
+						var options = new JsonSerializerOptions
+						{
+							PropertyNameCaseInsensitive = true
+						};
+						recipes = await _httpClient.GetFromJsonAsync<List<Recipe>>("data/recipes.json", options) ?? new List<Recipe>();
+						Console.WriteLine($"Successfully loaded {recipes.Count} recipes via HTTP");
+					}
 				}
 				catch (Exception ex)
 				{
-					Console.WriteLine($"Failed to load recipes: {ex.Message}");
+					Console.WriteLine($"Failed to load recipes: {ex.GetType().Name}: {ex.Message}");
+					Console.WriteLine($"Stack trace: {ex.StackTrace}");
+					if (ex.InnerException != null)
+					{
+						Console.WriteLine($"Inner exception: {ex.InnerException.GetType().Name}: {ex.InnerException.Message}");
+					}
 					recipes = new List<Recipe>();
 				}
 				_cache.Set(RecipesCacheKey, recipes, CacheDuration);

@@ -40,11 +40,6 @@ namespace EverettEats.Models
 		public List<string> Tags { get; set; } = [];
 
 		// SEO-friendly URL slug
-		public string Slug => Title.ToLower()
-			.Replace(" ", "-")
-			.Replace("'", "")
-			.Replace("&", "and")
-			.Replace(".", "")
-			.Replace(",", "");
+		public string Slug { get; set; } = string.Empty;
 	}
 }
