@@ -1,9 +1,9 @@
 namespace EverettEats.Models
 {
-	public enum DifficultyLevel
-	{
-		Easy,
-		Medium,
-		Hard
-	}
+    public enum DifficultyLevel
+    {
+        Easy,
+        Medium,
+        Hard,
+    }
 }

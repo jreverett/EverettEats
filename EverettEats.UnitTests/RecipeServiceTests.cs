@@ -1,12 +1,8 @@
 using EverettEats.Models;
 using EverettEats.Services;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 
 public class RecipeServiceTests
@@ -19,7 +15,7 @@ public class RecipeServiceTests
         var handler = new Mock<HttpMessageHandler>();
         var httpClient = new HttpClient(handler.Object)
         {
-            BaseAddress = new Uri("http://localhost/")
+            BaseAddress = new Uri("http://localhost/"),
         };
         var cache = new MemoryCache(new MemoryCacheOptions());
         var mockEnv = new Mock<IWebHostEnvironment>();
@@ -29,6 +25,7 @@ public class RecipeServiceTests
         {
             cache.Set("recipes_cache_v1", recipes);
         }
+
         return service;
     }
 
@@ -39,7 +36,7 @@ public class RecipeServiceTests
         var recipes = new List<Recipe>
         {
             new Recipe { Id = 1, Title = "B", DateAdded = DateTime.Now.AddDays(-1) },
-            new Recipe { Id = 2, Title = "A", DateAdded = DateTime.Now }
+            new Recipe { Id = 2, Title = "A", DateAdded = DateTime.Now },
         };
         var service = CreateService(recipes);
 
@@ -57,7 +54,7 @@ public class RecipeServiceTests
     {
         var recipes = new List<Recipe>
         {
-            new Recipe { Id = 1, Title = "Test" }
+            new Recipe { Id = 1, Title = "Test" },
         };
         var service = CreateService(recipes);
         var result = await service.GetRecipeByIdAsync(1);
@@ -70,7 +67,7 @@ public class RecipeServiceTests
     {
         var recipes = new List<Recipe>
         {
-            new Recipe { Id = 1, Title = "Test Slug" }
+            new Recipe { Id = 1, Title = "Test Slug" },
         };
         var service = CreateService(recipes);
         var result = await service.GetRecipeBySlugAsync("test-slug");
@@ -84,7 +81,7 @@ public class RecipeServiceTests
         var recipes = new List<Recipe>
         {
             new Recipe { Id = 1, Title = "Apple Pie" },
-            new Recipe { Id = 2, Title = "Banana Bread" }
+            new Recipe { Id = 2, Title = "Banana Bread" },
         };
         var service = CreateService(recipes);
         var result = await service.SearchRecipesAsync("Apple");
@@ -100,6 +97,7 @@ public class RecipeServiceTests
         {
             recipes.Add(new Recipe { Id = i, Title = $"Recipe {i}", DateAdded = DateTime.Now.AddDays(-i) });
         }
+
         var service = CreateService(recipes);
         var (page, total) = await service.GetPaginatedRecipesAsync(2, 10);
         Assert.Equal(10, page.Count);
