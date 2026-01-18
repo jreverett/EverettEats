@@ -48,7 +48,7 @@ public class RecipeServiceTests
     {
         var recipes = new List<Recipe>
         {
-            new Recipe { Id = 1, Title = "Test Slug" },
+            new Recipe { Id = 1, Title = "Test Slug", Slug = "test-slug" },
         };
         var service = CreateService(recipes);
         var result = await service.GetRecipeBySlugAsync("test-slug");
@@ -84,6 +84,132 @@ public class RecipeServiceTests
         Assert.Equal(10, page.Count);
         Assert.Equal(25, total);
         Assert.Equal("Recipe 11", page[0].Title);
+    }
+
+    [Fact]
+    public async Task GetRecipeByIdAsync_ReturnsNull_WhenRecipeNotFound()
+    {
+        var recipes = new List<Recipe>
+        {
+            new Recipe { Id = 1, Title = "Exists" },
+        };
+        var service = CreateService(recipes);
+        var result = await service.GetRecipeByIdAsync(999);
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task GetRecipeBySlugAsync_ReturnsNull_WhenSlugNotFound()
+    {
+        var recipes = new List<Recipe>
+        {
+            new Recipe { Id = 1, Title = "Exists", Slug = "exists" },
+        };
+        var service = CreateService(recipes);
+        var result = await service.GetRecipeBySlugAsync("nonexistent-slug");
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task SearchRecipesAsync_IsCaseInsensitive()
+    {
+        var recipes = new List<Recipe>
+        {
+            new Recipe { Id = 1, Title = "Chocolate Cake" },
+        };
+        var service = CreateService(recipes);
+        var result = await service.SearchRecipesAsync("CHOCOLATE");
+        Assert.Single(result);
+        Assert.Equal("Chocolate Cake", result[0].Title);
+    }
+
+    [Fact]
+    public async Task SearchRecipesAsync_FiltersByIngredients()
+    {
+        var recipes = new List<Recipe>
+        {
+            new Recipe { Id = 1, Title = "Pasta", Ingredients = new List<string> { "tomato sauce", "pasta" } },
+            new Recipe { Id = 2, Title = "Salad", Ingredients = new List<string> { "lettuce", "cucumber" } },
+        };
+        var service = CreateService(recipes);
+        var result = await service.SearchRecipesAsync("tomato");
+        Assert.Single(result);
+        Assert.Equal("Pasta", result[0].Title);
+    }
+
+    [Fact]
+    public async Task SearchRecipesAsync_FiltersByDescription()
+    {
+        var recipes = new List<Recipe>
+        {
+            new Recipe { Id = 1, Title = "Cake", Description = "Rich chocolate dessert" },
+            new Recipe { Id = 2, Title = "Bread", Description = "Simple wheat bread" },
+        };
+        var service = CreateService(recipes);
+        var result = await service.SearchRecipesAsync("chocolate");
+        Assert.Single(result);
+        Assert.Equal("Cake", result[0].Title);
+    }
+
+    [Fact]
+    public async Task SearchRecipesAsync_ReturnsEmpty_WhenNoMatches()
+    {
+        var recipes = new List<Recipe>
+        {
+            new Recipe { Id = 1, Title = "Apple Pie" },
+        };
+        var service = CreateService(recipes);
+        var result = await service.SearchRecipesAsync("banana");
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public async Task SearchRecipesAsync_ReturnsAll_WhenSearchTermEmpty()
+    {
+        var recipes = new List<Recipe>
+        {
+            new Recipe { Id = 1, Title = "Recipe 1" },
+            new Recipe { Id = 2, Title = "Recipe 2" },
+        };
+        var service = CreateService(recipes);
+        var result = await service.SearchRecipesAsync(string.Empty);
+        Assert.Equal(2, result.Count);
+    }
+
+    [Fact]
+    public async Task GetAllRecipesAsync_ReturnsEmpty_WhenNoRecipes()
+    {
+        var service = CreateService(new List<Recipe>());
+        var result = await service.GetAllRecipesAsync();
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public async Task GetPaginatedRecipesAsync_HandlesLastPagePartialResults()
+    {
+        var recipes = new List<Recipe>();
+        for (int i = 1; i <= 23; i++)
+        {
+            recipes.Add(new Recipe { Id = i, Title = $"Recipe {i}", DateAdded = DateTime.Now.AddDays(-i) });
+        }
+
+        var service = CreateService(recipes);
+        var (page, total) = await service.GetPaginatedRecipesAsync(3, 10);
+        Assert.Equal(3, page.Count); // Only 3 items on last page
+        Assert.Equal(23, total);
+    }
+
+    [Fact]
+    public async Task GetPaginatedRecipesAsync_ReturnsEmpty_WhenPageOutOfBounds()
+    {
+        var recipes = new List<Recipe>
+        {
+            new Recipe { Id = 1, Title = "Recipe 1", DateAdded = DateTime.Now },
+        };
+        var service = CreateService(recipes);
+        var (page, total) = await service.GetPaginatedRecipesAsync(10, 10);
+        Assert.Empty(page);
+        Assert.Equal(1, total);
     }
 
     private RecipeService CreateService(List<Recipe>? recipes = null)
