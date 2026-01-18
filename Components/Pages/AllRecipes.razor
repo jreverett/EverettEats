@@ -1,6 +1,7 @@
 @page "/recipes"
 @using EverettEats.Models
 @using EverettEats.Services
+@implements IDisposable
 @inject IRecipeService RecipeService
 
 <div class="notebook-page recipes-page">
@@ -19,13 +20,11 @@
         </h2>
         
         <div class="search-wrapper">
-            <input type="text" 
-                   @bind="searchTerm" 
-                   @bind:event="oninput"
-                   @onkeyup="OnSearchChanged"
-                   placeholder="Search by name, ingredient, or category..." 
+            <input type="text"
+                   value="@searchTerm"
+                   @oninput="OnSearchInput"
+                   placeholder="Search by name, ingredient, or category..."
                    class="search-input" />
-            <span class="search-icon">🔍</span>
         </div>
     </div>
 
@@ -92,6 +91,7 @@
     private string searchTerm = "";
     private List<Recipe> allRecipes = new();
     private List<Recipe> filteredRecipes = new();
+    private System.Timers.Timer? debounceTimer;
 
     protected override async Task OnInitializedAsync()
     {
@@ -99,7 +99,28 @@
         filteredRecipes = allRecipes;
     }
 
-    private void OnSearchChanged()
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? "";
+
+        debounceTimer?.Stop();
+        debounceTimer?.Dispose();
+
+        debounceTimer = new System.Timers.Timer(300);
+        debounceTimer.Elapsed += async (sender, args) =>
+        {
+            debounceTimer?.Stop();
+            await InvokeAsync(() =>
+            {
+                PerformSearch();
+                StateHasChanged();
+            });
+        };
+        debounceTimer.AutoReset = false;
+        debounceTimer.Start();
+    }
+
+    private void PerformSearch()
     {
         if (string.IsNullOrWhiteSpace(searchTerm))
         {
@@ -114,7 +135,6 @@
                 r.Category.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
             ).ToList();
         }
-        StateHasChanged();
     }
 
     private string GetDifficultyEmoji(DifficultyLevel difficulty) => difficulty switch
@@ -124,4 +144,10 @@
         DifficultyLevel.Hard => "💪 Challenge",
         _ => "👌 Easy"
     };
+
+    public void Dispose()
+    {
+        debounceTimer?.Stop();
+        debounceTimer?.Dispose();
+    }
 }

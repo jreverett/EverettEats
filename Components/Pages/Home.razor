@@ -2,7 +2,9 @@
 @page "/"
 @using EverettEats.Models
 @using EverettEats.Services
+@implements IDisposable
 @inject IRecipeService RecipeService
+@inject NavigationManager Navigation
 
 <div class="notebook-page home-page">
     <div class="coffee-ring coffee-ring-hero"></div>
@@ -22,20 +24,19 @@
         </h2>
         
         <div class="search-wrapper">
-            <input type="text" 
-                   @bind="searchTerm" 
-                   @bind:event="oninput"
+            <input type="text"
+                   value="@searchTerm"
+                   @oninput="OnSearchInput"
                    @onfocus="OnSearchFocus"
                    @onblur="OnSearchBlur"
-                   placeholder="Try 'chocolate' or 'pasta'..." 
+                   placeholder="Try 'chocolate' or 'pasta'..."
                    class="search-input @(isSearchFocused ? "focused" : "")" />
-            <span class="search-icon">🔍</span>
         </div>
     </div>
 
     <div class="recent-recipes">
         <h2 class="section-title">
-            <span class="title-text">Recent Additions</span>
+            <span class="title-text">@(string.IsNullOrWhiteSpace(searchTerm) ? "Recent Additions" : "Search Results")</span>
             <span class="pencil-underline"></span>
         </h2>
         
@@ -87,11 +88,13 @@
 @code {
     private string searchTerm = "";
     private List<Recipe> recentRecipes = new();
+    private List<Recipe> allRecipes = new();
     private bool isSearchFocused = false;
+    private System.Timers.Timer? debounceTimer;
 
     protected override async Task OnInitializedAsync()
     {
-        var allRecipes = await RecipeService.GetAllRecipesAsync();
+        allRecipes = await RecipeService.GetAllRecipesAsync();
         recentRecipes = allRecipes.Take(6).ToList();
     }
 
@@ -102,14 +105,58 @@
         DifficultyLevel.Hard => "💪 Challenge",
         _ => "👌 Easy"
     };
-    
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? "";
+
+        debounceTimer?.Stop();
+        debounceTimer?.Dispose();
+
+        debounceTimer = new System.Timers.Timer(300);
+        debounceTimer.Elapsed += async (sender, args) =>
+        {
+            debounceTimer?.Stop();
+            await InvokeAsync(() =>
+            {
+                PerformSearch();
+                StateHasChanged();
+            });
+        };
+        debounceTimer.AutoReset = false;
+        debounceTimer.Start();
+    }
+
+    private void PerformSearch()
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            recentRecipes = allRecipes.Take(6).ToList();
+        }
+        else
+        {
+            var term = searchTerm.ToLowerInvariant();
+            recentRecipes = allRecipes
+                .Where(r => r.Title.ToLowerInvariant().Contains(term) ||
+                           r.Description.ToLowerInvariant().Contains(term) ||
+                           r.Ingredients.Any(i => i.ToLowerInvariant().Contains(term)))
+                .ToList();
+        }
+    }
+
     private void OnSearchFocus()
     {
         isSearchFocused = true;
     }
-    
+
     private void OnSearchBlur()
     {
         isSearchFocused = false;
+    }
+
+    public void Dispose()
+    {
+        debounceTimer?.Stop();
+        debounceTimer?.Dispose();
     }
 }

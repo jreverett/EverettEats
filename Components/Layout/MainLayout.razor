@@ -4,19 +4,21 @@
 <div class="notebook-layout">
     <header class="notebook-header">
         <div class="header-content">
-            <a href="/" class="notebook-title">
-                <span class="title-text">Everett's</span>
-                <span class="title-subtitle">Recipe Notebook</span>
+            <a href="/" class="notebook-title" @onclick="CloseMobileMenu">
+                <span class="title-text">Everett's <span class="title-subtitle-inline">Recipe Notebook</span></span>
             </a>
-            
+
             <!-- Burger menu for mobile -->
-            <button class="mobile-menu-toggle" @onclick="ToggleMobileMenu" aria-label="Toggle menu">
+            <button class="mobile-menu-toggle @(isMobileMenuOpen ? "active" : "")"
+                    @onclick="ToggleMobileMenu"
+                    aria-label="@(isMobileMenuOpen ? "Close menu" : "Open menu")"
+                    aria-expanded="@isMobileMenuOpen">
                 <span class="burger-line"></span>
                 <span class="burger-line"></span>
                 <span class="burger-line"></span>
             </button>
-            
-            <nav class="notebook-tabs @(isMobileMenuOpen ? "mobile-open" : "")">
+
+            <nav class="notebook-tabs @(isMobileMenuOpen ? "mobile-open" : "")" role="navigation">
                 <a href="/" class="tab-link @(GetActiveClass("/"))" @onclick="CloseMobileMenu">
                     <span class="tab-icon">🏠</span>
                     <span class="tab-text">Home</span>
@@ -33,9 +35,16 @@
         </div>
     </header>
 
-    <main class="notebook-pages">
+    @if (isMobileMenuOpen)
+    {
+        <div class="mobile-menu-overlay" @onclick="CloseMobileMenu"></div>
+    }
+
+    <main class="notebook-pages" @onclick="CloseMobileMenu">
         <div class="page-lines"></div>
-        @Body
+        <div class="page-content">
+            @Body
+        </div>
     </main>
 </div>
 
