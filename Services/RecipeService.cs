@@ -6,11 +6,11 @@ namespace EverettEats.Services
 {
     public class RecipeService : IRecipeService
     {
+        private const string _recipesCacheKey = "recipes_cache_v1";
+        private static readonly TimeSpan _cacheDuration = TimeSpan.FromMinutes(30);
         private readonly HttpClient _httpClient;
         private readonly IMemoryCache _cache;
         private readonly IWebHostEnvironment _env;
-        private const string RecipesCacheKey = "recipes_cache_v1";
-        private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(30);
 
         public RecipeService(HttpClient httpClient, IMemoryCache cache, IWebHostEnvironment env)
         {
@@ -88,7 +88,7 @@ namespace EverettEats.Services
 
         private async Task<List<Recipe>> GetRecipesFromCacheAsync()
         {
-            if (!_cache.TryGetValue(RecipesCacheKey, out List<Recipe>? recipes) || recipes == null)
+            if (!_cache.TryGetValue(_recipesCacheKey, out List<Recipe>? recipes) || recipes == null)
             {
                 try
                 {
@@ -133,7 +133,7 @@ namespace EverettEats.Services
                     recipes = new List<Recipe>();
                 }
 
-                _cache.Set(RecipesCacheKey, recipes, CacheDuration);
+                _cache.Set(_recipesCacheKey, recipes, _cacheDuration);
             }
 
             return recipes;

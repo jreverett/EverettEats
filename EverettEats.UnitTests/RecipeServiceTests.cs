@@ -10,25 +10,6 @@ public class RecipeServiceTests
     private readonly Mock<HttpClient> _httpClientMock = new();
     private readonly IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
 
-    private RecipeService CreateService(List<Recipe>? recipes = null)
-    {
-        var handler = new Mock<HttpMessageHandler>();
-        var httpClient = new HttpClient(handler.Object)
-        {
-            BaseAddress = new Uri("http://localhost/"),
-        };
-        var cache = new MemoryCache(new MemoryCacheOptions());
-        var mockEnv = new Mock<IWebHostEnvironment>();
-        mockEnv.Setup(e => e.WebRootPath).Returns("/tmp");
-        var service = new RecipeService(httpClient, cache, mockEnv.Object);
-        if (recipes != null)
-        {
-            cache.Set("recipes_cache_v1", recipes);
-        }
-
-        return service;
-    }
-
     [Fact]
     public async Task GetAllRecipesAsync_ReturnsRecipesOrderedByDate()
     {
@@ -103,5 +84,24 @@ public class RecipeServiceTests
         Assert.Equal(10, page.Count);
         Assert.Equal(25, total);
         Assert.Equal("Recipe 11", page[0].Title);
+    }
+
+    private RecipeService CreateService(List<Recipe>? recipes = null)
+    {
+        var handler = new Mock<HttpMessageHandler>();
+        var httpClient = new HttpClient(handler.Object)
+        {
+            BaseAddress = new Uri("http://localhost/"),
+        };
+        var cache = new MemoryCache(new MemoryCacheOptions());
+        var mockEnv = new Mock<IWebHostEnvironment>();
+        mockEnv.Setup(e => e.WebRootPath).Returns("/tmp");
+        var service = new RecipeService(httpClient, cache, mockEnv.Object);
+        if (recipes != null)
+        {
+            cache.Set("recipes_cache_v1", recipes);
+        }
+
+        return service;
     }
 }
