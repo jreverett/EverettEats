@@ -28,7 +28,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 
     - name: Publish
-      run: dotnet publish EverettEats/EverettEats.csproj -c Release -o ./publish --self-contained false
+      run: dotnet publish EverettEats.csproj -c Release -o ./publish --self-contained false
 
     - name: Deploy to VPS
       uses: appleboy/scp-action@v0.1.5
