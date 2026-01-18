@@ -28,8 +28,8 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 
     - name: Publish
-      run: dotnet publish -c Release -o ./publish --self-contained false
-    
+      run: dotnet publish EverettEats/EverettEats.csproj -c Release -o ./publish --self-contained false
+
     - name: Deploy to VPS
       uses: appleboy/scp-action@v0.1.5
       with:
@@ -39,7 +39,7 @@ jobs:
         source: "./publish/*"
         target: "/tmp/everetteats-deploy"
         rm: true
-    
+
     - name: Update app on VPS
       uses: appleboy/ssh-action@v1.0.0
       with:
@@ -48,9 +48,9 @@ jobs:
         key: ${{ secrets.VPS_PRIVATE_KEY }}
         script: |
           sudo systemctl stop everetteats
-          rm -rf /var/www/everetteats/*
-          mv /tmp/everetteats-deploy/publish/* /var/www/everetteats/
+          sudo rm -rf /var/www/everetteats/*
+          sudo mv /tmp/everetteats-deploy/publish/* /var/www/everetteats/
           sudo chown -R everetteats:everetteats /var/www/everetteats
           sudo systemctl start everetteats
-          rm -rf /tmp/everetteats-deploy
+          sudo rm -rf /tmp/everetteats-deploy
           echo "Deployment completed at $(date)"
