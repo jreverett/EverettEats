@@ -1,0 +1,19 @@
+- Title
+- Description
+- Prep time / Cook time / Total time
+- Servings
+- Category (Desserts, MainDishes, Appetizers, Sides, Beverages, Breakfast, or Snacks)
+- Difficulty (Easy, Medium, or Hard)
+- Ingredients list
+- Instructions
+- Any tips (optional)
+- Tags (optional)
+- Image URL (optional - or I can use a placeholder)
+
+Recipe 1:
+- Twice cooked pork
+- Tender pork belly slices with a complex sticky glaze of flavours
+- 4 servings
+
+Recipe 2:
+- New York Cheesecake with Raspberry and Passion Fruit sauce
