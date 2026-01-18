@@ -47,6 +47,7 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_PRIVATE_KEY }}
         script: |
+          set -e
           sudo systemctl stop everetteats
           sudo rm -rf /var/www/everetteats/*
           sudo mv /tmp/everetteats-deploy/publish/* /var/www/everetteats/
