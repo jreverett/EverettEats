@@ -37,7 +37,7 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_PRIVATE_KEY }}
         source: "./publish/*"
-        target: "/tmp/everetteats-deploy/publish"
+        target: "/tmp/everetteats-deploy"
         rm: true
 
     - name: Update app on VPS
