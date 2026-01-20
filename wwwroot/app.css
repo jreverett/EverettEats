@@ -88,12 +88,12 @@ body {
     top: 0;
     z-index: 100;
     box-shadow: 0 2px 8px var(--shadow);
-    padding: 12px 24px;
+    padding: 8px 24px;
 }
 
 @media (max-width: 768px) {
     .notebook-header {
-        padding: 12px 20px;
+        padding: 10px 20px;
     }
 }
 
@@ -120,8 +120,14 @@ body {
     font-weight: 700;
     color: var(--ink-blue);
     display: inline-flex;
-    align-items: baseline;
+    align-items: center;
     white-space: nowrap;
+    line-height: 1.4;
+}
+
+.title-main {
+    display: inline-block;
+    margin-top: 4px;
 }
 
 .title-subtitle {
@@ -138,7 +144,7 @@ body {
     color: var(--pencil-gray);
     font-weight: 400;
     margin-left: 0.25rem;
-    vertical-align: baseline;
+    line-height: 1.4;
 }
 
 /* Mobile Menu Toggle */
@@ -216,7 +222,7 @@ body {
 }
 
 .tab-link {
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.9rem;
     border-radius: 8px 8px 0 0;
     text-decoration: none;
     color: var(--ink-black);
@@ -425,7 +431,7 @@ body {
     font-family: var(--font-readable);
     border: 2px solid var(--pencil-gray);
     border-radius: 25px;
-    background: transparent;
+    background: white;
     transition: all 0.3s ease;
     position: relative;
     z-index: 1;
@@ -433,7 +439,7 @@ body {
 
 .search-input:hover {
     border-color: var(--ink-black);
-    background: rgba(255, 255, 255, 0.2);
+    background: white;
 }
 
 .search-input:focus,
@@ -441,7 +447,7 @@ body {
     outline: none;
     border-color: var(--ink-blue);
     border-style: solid;
-    background: rgba(255, 255, 255, 0.4);
+    background: white;
     box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.1);
 }
 
@@ -909,7 +915,7 @@ body {
         border-bottom: 2px solid var(--paper-lines);
         box-shadow: 0 4px 12px var(--shadow);
         flex-direction: column;
-        padding: 0;
+        padding: 0.5rem 0;
         display: none;
         opacity: 0;
         transform: translateY(-10px);
@@ -923,12 +929,13 @@ body {
     }
 
     .tab-link {
-        width: 100%;
+        width: calc(100% - 1rem);
         justify-content: flex-start;
-        padding: 1rem 1.5rem;
-        border-radius: 0;
-        border-bottom: 1px solid var(--paper-lines);
-        font-size: 1.1rem;
+        padding: 0.65rem 1rem;
+        border-radius: 8px;
+        border: none;
+        font-size: 1rem;
+        margin: 0.15rem 0.5rem;
     }
 
     .tab-link:last-child {
@@ -937,6 +944,7 @@ body {
 
     .tab-link.active {
         background: var(--highlight-yellow);
+        border: none;
     }
 
     .tab-link:active {

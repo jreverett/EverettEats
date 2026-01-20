@@ -5,7 +5,7 @@
     <header class="notebook-header">
         <div class="header-content">
             <a href="/" class="notebook-title" @onclick="CloseMobileMenu">
-                <span class="title-text">Everett's <span class="title-subtitle-inline">Recipe Notebook</span></span>
+                <span class="title-text"><span class="title-main">Everett's</span> <span class="title-subtitle-inline">Recipe Notebook</span></span>
             </a>
 
             <!-- Burger menu for mobile -->
@@ -26,10 +26,6 @@
                 <a href="/recipes" class="tab-link @(GetActiveClass("/recipes"))" @onclick="CloseMobileMenu">
                     <span class="tab-icon">📖</span>
                     <span class="tab-text">All Recipes</span>
-                </a>
-                <a href="/favorites" class="tab-link @(GetActiveClass("/favorites"))" @onclick="CloseMobileMenu">
-                    <span class="tab-icon">❤️</span>
-                    <span class="tab-text">Favorites</span>
                 </a>
             </nav>
         </div>

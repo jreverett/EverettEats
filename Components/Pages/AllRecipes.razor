@@ -36,7 +36,7 @@
                     <span class="title-text">Recipe Collection</span>
                     <span class="pencil-underline"></span>
                 </h2>
-                <p class="recipes-count">Found @filteredRecipes.Count recipes</p>
+                <p class="recipes-count">Found @filteredRecipes.Count @(filteredRecipes.Count == 1 ? "recipe" : "recipes")</p>
             </div>
             
             <div class="recipe-cards">

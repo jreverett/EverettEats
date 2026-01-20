@@ -27,10 +27,8 @@
             <input type="text"
                    value="@searchTerm"
                    @oninput="OnSearchInput"
-                   @onfocus="OnSearchFocus"
-                   @onblur="OnSearchBlur"
                    placeholder="Try 'chocolate' or 'pasta'..."
-                   class="search-input @(isSearchFocused ? "focused" : "")" />
+                   class="search-input" />
         </div>
     </div>
 
@@ -89,7 +87,6 @@
     private string searchTerm = "";
     private List<Recipe> recentRecipes = new();
     private List<Recipe> allRecipes = new();
-    private bool isSearchFocused = false;
     private System.Timers.Timer? debounceTimer;
 
     protected override async Task OnInitializedAsync()
@@ -142,16 +139,6 @@
                            r.Ingredients.Any(i => i.ToLowerInvariant().Contains(term)))
                 .ToList();
         }
-    }
-
-    private void OnSearchFocus()
-    {
-        isSearchFocused = true;
-    }
-
-    private void OnSearchBlur()
-    {
-        isSearchFocused = false;
     }
 
     public void Dispose()
