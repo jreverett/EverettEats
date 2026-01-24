@@ -2,13 +2,13 @@
 
 <HeadContent>
     <title>@GetFullTitle()</title>
-    <meta name="description" content="@Description">
+    <meta name="description" content="@GetDescription()">
 
     <!-- Open Graph -->
     <meta property="og:type" content="@Type">
     <meta property="og:url" content="@GetCurrentUrl()">
     <meta property="og:title" content="@GetFullTitle()">
-    <meta property="og:description" content="@Description">
+    <meta property="og:description" content="@GetDescription()">
     <meta property="og:image" content="@GetAbsoluteImageUrl()">
     <meta property="og:site_name" content="Everett's Recipe Notebook">
 
@@ -16,7 +16,7 @@
     <meta name="twitter:card" content="@TwitterCard">
     <meta name="twitter:url" content="@GetCurrentUrl()">
     <meta name="twitter:title" content="@GetFullTitle()">
-    <meta name="twitter:description" content="@Description">
+    <meta name="twitter:description" content="@GetDescription()">
     <meta name="twitter:image" content="@GetAbsoluteImageUrl()">
 </HeadContent>
 
@@ -34,6 +34,11 @@
     private string GetFullTitle()
     {
         return string.IsNullOrEmpty(Title) ? SiteTitle : $"{Title} | {SiteTitle}";
+    }
+
+    private string GetDescription()
+    {
+        return string.IsNullOrEmpty(Description) ? DefaultDescription : Description;
     }
 
     private string GetCurrentUrl()
