@@ -9,7 +9,17 @@
     </Found>
     <NotFound>
         <LayoutView Layout="typeof(MainLayout)">
-            <p>Sorry, there's nothing at this address.</p>
+            <div class="notebook-page not-found-page">
+                <div class="not-found-content">
+                    <div class="not-found-icon">📖</div>
+                    <h1 class="not-found-title">Page Not Found</h1>
+                    <p class="not-found-message">
+                        <span>Looks like this recipe page got lost in the kitchen!</span>
+                        <span>The page you're looking for doesn't exist or may have been moved.</span>
+                    </p>
+                    <a href="/" class="back-home-link">← Back to Recipes</a>
+                </div>
+            </div>
         </LayoutView>
     </NotFound>
 </Router>
