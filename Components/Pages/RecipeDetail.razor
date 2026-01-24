@@ -6,6 +6,12 @@
 
 @if (recipe != null)
 {
+    <PageMeta
+        Title="@recipe.Title"
+        Description="@GetRecipeDescription()"
+        ImageUrl="@recipe.ImageUrl"
+        Type="article" />
+
     <div class="recipe-detail-page">
         <button @onclick="GoBack" class="back-button">
             ← Back to recipes
@@ -117,5 +123,18 @@ else
     private void GoBack()
     {
         Navigation.NavigateTo("/");
+    }
+
+    private string GetRecipeDescription()
+    {
+        if (recipe == null) return "";
+
+        if (!string.IsNullOrEmpty(recipe.Description))
+        {
+            return recipe.Description;
+        }
+
+        // Fallback description
+        return $"Learn how to make {recipe.Title}. Prep time: {recipe.PrepTime}, Cook time: {recipe.CookTime}, Serves: {recipe.Servings}.";
     }
 }

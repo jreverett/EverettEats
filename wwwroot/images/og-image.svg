@@ -1,0 +1,124 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Radial gradient for realistic coffee stain effect -->
+    <radialGradient id="coffeeGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#E8D5B7;stop-opacity:0.15"/>
+      <stop offset="40%" style="stop-color:#D4A574;stop-opacity:0.25"/>
+      <stop offset="80%" style="stop-color:#C29153;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#8B6F47;stop-opacity:0.5"/>
+    </radialGradient>
+
+    <!-- Darker edge gradient for the main ring -->
+    <radialGradient id="coffeeEdge" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#8B6F47;stop-opacity:0"/>
+      <stop offset="85%" style="stop-color:#8B6F47;stop-opacity:0"/>
+      <stop offset="92%" style="stop-color:#A0826A;stop-opacity:0.45"/>
+      <stop offset="100%" style="stop-color:#8B6F47;stop-opacity:0.6"/>
+    </radialGradient>
+
+    <!-- Font imports -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@700&amp;family=Caveat:wght@400&amp;display=swap');
+
+      .main-title {
+        font-family: 'Kalam', cursive;
+        font-weight: 700;
+        font-size: 120px;
+        fill: #2C5282;
+      }
+
+      .subtitle {
+        font-family: 'Caveat', cursive;
+        font-weight: 400;
+        font-size: 95px;
+        fill: #718096;
+      }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#FFFEF7"/>
+
+  <!-- Notebook ruled lines across the page -->
+  <g opacity="0.6">
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#E8E5DB" stroke-width="1.5"/>
+    <line x1="0" y1="155" x2="1200" y2="155" stroke="#E8E5DB" stroke-width="1.5"/>
+    <line x1="0" y1="210" x2="1200" y2="210" stroke="#E8E5DB" stroke-width="1.5"/>
+    <line x1="0" y1="265" x2="1200" y2="265" stroke="#E8E5DB" stroke-width="1.5"/>
+    <line x1="0" y1="320" x2="1200" y2="320" stroke="#E8E5DB" stroke-width="1.5"/>
+    <line x1="0" y1="375" x2="1200" y2="375" stroke="#E8E5DB" stroke-width="1.5"/>
+    <line x1="0" y1="430" x2="1200" y2="430" stroke="#E8E5DB" stroke-width="1.5"/>
+    <line x1="0" y1="485" x2="1200" y2="485" stroke="#E8E5DB" stroke-width="1.5"/>
+    <line x1="0" y1="540" x2="1200" y2="540" stroke="#E8E5DB" stroke-width="1.5"/>
+  </g>
+
+  <!-- Margin line (left side like notebook paper) -->
+  <line x1="80" y1="0" x2="80" y2="630" stroke="#E8E5DB" stroke-width="2" opacity="0.6"/>
+
+  <!-- Realistic coffee stain bleeding off the top-right edge -->
+  <g transform="translate(1030, 100)">
+    <!-- Light inner wash/stain -->
+    <ellipse cx="0" cy="0" rx="195" ry="190" fill="#E5D4B8" opacity="0.2"/>
+
+    <!-- Main complete ring - one continuous connected path -->
+    <!-- Outer edge of ring -->
+    <path d="M -190,0
+             C -190,-105 -105,-190 0,-190
+             C 105,-190 190,-105 190,0
+             C 190,105 105,190 0,190
+             C -105,190 -190,105 -190,0 Z"
+          fill="none" stroke="#A08060" stroke-width="18" opacity="0.5"/>
+
+    <!-- Inner edge to create ring shape with varying thickness -->
+    <!-- This creates thicker sections by overlaying -->
+    <path d="M -190,0
+             C -190,-105 -105,-190 0,-190
+             C 105,-190 190,-105 190,0
+             C 190,105 105,190 0,190
+             C -105,190 -190,105 -190,0 Z"
+          fill="none" stroke="#B89570" stroke-width="10" opacity="0.4"/>
+
+    <!-- Thicker/darker section on bottom-left where coffee pools -->
+    <path d="M -185,40
+             C -190,0 -185,-50 -170,-95
+             C -150,-140 -115,-175 -70,-190"
+          fill="none" stroke="#8B6B4A" stroke-width="22" stroke-linecap="round" opacity="0.55"/>
+
+    <!-- Medium thickness on bottom -->
+    <path d="M -70,185
+             C -120,175 -160,145 -182,100"
+          fill="none" stroke="#9A7B5A" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+
+    <!-- Second offset ring (mug picked up and placed again) -->
+    <path d="M -175,-30
+             C -170,-100 -115,-160 -40,-175
+             C 30,-188 100,-175 155,-140"
+          fill="none" stroke="#C4A882" stroke-width="8" stroke-linecap="round" opacity="0.35"/>
+
+    <path d="M 170,120
+             C 130,165 65,190 0,190
+             C -50,190 -100,175 -140,145"
+          fill="none" stroke="#C4A882" stroke-width="6" stroke-linecap="round" opacity="0.3"/>
+
+    <!-- Small drip running from bottom of ring -->
+    <path d="M -50,188
+             C -55,210 -60,240 -55,260
+             C -52,268 -48,265 -48,255
+             C -50,235 -48,210 -45,192"
+          fill="#A08060" opacity="0.4"/>
+
+    <!-- Splatters -->
+    <ellipse cx="-65" cy="275" rx="6" ry="4" fill="#B89570" opacity="0.35" transform="rotate(-15 -65 275)"/>
+    <circle cx="-75" cy="265" r="3" fill="#A08060" opacity="0.4"/>
+    <circle cx="-215" cy="70" r="4" fill="#B89570" opacity="0.3"/>
+  </g>
+
+  <!-- Main content centered -->
+  <g transform="translate(500, 315)">
+    <!-- Main title "Everett's" -->
+    <text class="main-title" text-anchor="middle" x="0" y="-20">Everett's</text>
+
+    <!-- Subtitle "Recipe Notebook" -->
+    <text class="subtitle" text-anchor="middle" x="0" y="85">Recipe Notebook</text>
+  </g>
+</svg>

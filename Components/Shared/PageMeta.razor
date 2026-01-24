@@ -1,0 +1,53 @@
+@inject NavigationManager Navigation
+
+<HeadContent>
+    <title>@GetFullTitle()</title>
+    <meta name="description" content="@Description">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="@Type">
+    <meta property="og:url" content="@GetCurrentUrl()">
+    <meta property="og:title" content="@GetFullTitle()">
+    <meta property="og:description" content="@Description">
+    <meta property="og:image" content="@GetAbsoluteImageUrl()">
+    <meta property="og:site_name" content="Everett's Recipe Notebook">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="@TwitterCard">
+    <meta name="twitter:url" content="@GetCurrentUrl()">
+    <meta name="twitter:title" content="@GetFullTitle()">
+    <meta name="twitter:description" content="@Description">
+    <meta name="twitter:image" content="@GetAbsoluteImageUrl()">
+</HeadContent>
+
+@code {
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public string Description { get; set; } = "";
+    [Parameter] public string? ImageUrl { get; set; }
+    [Parameter] public string Type { get; set; } = "website";
+    [Parameter] public string TwitterCard { get; set; } = "summary_large_image";
+
+    private string SiteTitle = "Everett's Recipe Notebook";
+    private string DefaultDescription = "Discover delicious recipes for every occasion at Everett Eats. From appetizers to desserts, find your next favorite dish.";
+    private string DefaultImage = "/images/og-image.jpg";
+
+    private string GetFullTitle()
+    {
+        return string.IsNullOrEmpty(Title) ? SiteTitle : $"{Title} | {SiteTitle}";
+    }
+
+    private string GetCurrentUrl()
+    {
+        return Navigation.Uri;
+    }
+
+    private string GetAbsoluteImageUrl()
+    {
+        var image = ImageUrl ?? DefaultImage;
+        if (image.StartsWith("http"))
+        {
+            return image;
+        }
+        return $"{Navigation.BaseUri.TrimEnd('/')}{image}";
+    }
+}
