@@ -39,7 +39,6 @@
 html {
     font-size: 16px;
     -webkit-text-size-adjust: 100%;
-    overscroll-behavior: none;
     overflow-x: hidden;
 }
 
@@ -49,9 +48,7 @@ body {
     background-color: var(--paper-white);
     line-height: 1.6;
     min-height: 100vh;
-    overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
-    overflow-x: hidden;
 }
 
 /* Layout Structure */
