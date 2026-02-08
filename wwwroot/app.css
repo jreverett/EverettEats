@@ -1190,6 +1190,117 @@ body {
     }
 }
 
+/* Recipe Gallery - Polaroid Style */
+.recipe-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+}
+
+.gallery-thumbnail {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.gallery-thumbnail:hover {
+    transform: scale(1.05) rotate(2deg);
+}
+
+.gallery-thumbnail:focus {
+    outline: 2px solid var(--ink-blue);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+.gallery-thumbnail.active .polaroid-frame {
+    border-color: var(--ink-blue);
+    box-shadow: 0 4px 12px rgba(44, 82, 130, 0.3);
+}
+
+.polaroid-frame {
+    position: relative;
+    background: white;
+    padding: 6px 6px 6px 6px;
+    border: 3px solid var(--paper-lines);
+    border-radius: 4px;
+    box-shadow: 2px 3px 8px var(--shadow);
+    transform: rotate(-2deg);
+    transition: all 0.2s ease;
+}
+
+.gallery-thumbnail:nth-child(even) .polaroid-frame {
+    transform: rotate(2deg);
+}
+
+.gallery-thumbnail:nth-child(3n) .polaroid-frame {
+    transform: rotate(-1deg);
+}
+
+.polaroid-frame img {
+    width: 100px;
+    height: 75px;
+    object-fit: cover;
+    display: block;
+    border-radius: 2px;
+}
+
+.tape-corner {
+    position: absolute;
+    width: 30px;
+    height: 14px;
+    background: var(--sticky-note);
+    opacity: 0.85;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.tape-corner-left {
+    top: -7px;
+    left: 8px;
+    transform: rotate(-12deg);
+}
+
+.tape-corner-right {
+    top: -7px;
+    right: 8px;
+    transform: rotate(12deg);
+}
+
+@media (max-width: 768px) {
+    .recipe-gallery {
+        gap: 0.75rem;
+    }
+
+    .polaroid-frame {
+        padding: 4px;
+    }
+
+    .polaroid-frame img {
+        width: 80px;
+        height: 60px;
+    }
+
+    .tape-corner {
+        width: 24px;
+        height: 12px;
+    }
+
+    .tape-corner-left {
+        top: -6px;
+        left: 6px;
+    }
+
+    .tape-corner-right {
+        top: -6px;
+        right: 6px;
+    }
+}
+
 /* Print Styles */
 @media print {
     .notebook-header,

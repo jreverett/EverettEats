@@ -92,7 +92,7 @@
     protected override async Task OnInitializedAsync()
     {
         allRecipes = await RecipeService.GetAllRecipesAsync();
-        recentRecipes = allRecipes.Take(6).ToList();
+        recentRecipes = allRecipes.Take(4).ToList();
     }
 
     private string GetDifficultyEmoji(DifficultyLevel difficulty) => difficulty switch
@@ -128,7 +128,7 @@
     {
         if (string.IsNullOrWhiteSpace(searchTerm))
         {
-            recentRecipes = allRecipes.Take(6).ToList();
+            recentRecipes = allRecipes.Take(4).ToList();
         }
         else
         {

@@ -17,11 +17,30 @@
             ← Back to recipes
         </button>
 
-        @if (!string.IsNullOrEmpty(recipe.ImageUrl))
+        @if (!string.IsNullOrEmpty(currentHeroImage))
         {
             <div class="recipe-hero">
-                <img src="@recipe.ImageUrl" alt="@recipe.Title" class="recipe-hero-image" />
+                <img src="@currentHeroImage" alt="@recipe.Title" class="recipe-hero-image" />
             </div>
+
+            @if (allImages.Count > 1)
+            {
+                <div class="recipe-gallery">
+                    @foreach (var imageUrl in allImages)
+                    {
+                        <button class="gallery-thumbnail @(imageUrl == currentHeroImage ? "active" : "")"
+                                @onclick="() => SelectImage(imageUrl)"
+                                type="button"
+                                aria-label="View image">
+                            <div class="polaroid-frame">
+                                <img src="@imageUrl" alt="@recipe.Title" />
+                                <div class="tape-corner tape-corner-left"></div>
+                                <div class="tape-corner tape-corner-right"></div>
+                            </div>
+                        </button>
+                    }
+                </div>
+            }
         }
 
         <div class="recipe-header">
@@ -114,10 +133,30 @@ else
 @code {
     [Parameter] public string Slug { get; set; } = "";
     private Recipe? recipe;
+    private string currentHeroImage = "";
+    private List<string> allImages = [];
 
     protected override async Task OnInitializedAsync()
     {
         recipe = await RecipeService.GetRecipeBySlugAsync(Slug);
+        if (recipe != null)
+        {
+            allImages = [];
+            if (!string.IsNullOrEmpty(recipe.ImageUrl))
+            {
+                allImages.Add(recipe.ImageUrl);
+            }
+            if (recipe.GalleryImages?.Count > 0)
+            {
+                allImages.AddRange(recipe.GalleryImages);
+            }
+            currentHeroImage = allImages.FirstOrDefault() ?? "";
+        }
+    }
+
+    private void SelectImage(string imageUrl)
+    {
+        currentHeroImage = imageUrl;
     }
 
     private void GoBack()

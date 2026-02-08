@@ -144,7 +144,9 @@
 			"2 cloves garlic, minced",
 			"1 teaspoon dried chili flakes (optional)",
 			"1 tablespoon brown sugar",
-			"1 tablespoon white wine vinegar"
+			"1 tablespoon white wine vinegar",
+			"Sesame seeds, for garnish (optional)",
+			"Chopped spring onion, for garnish (optional)"
 		],
 		"instructions": [
 			"Place pork belly rashers in a large pan with stock and bring to a boil over high heat.",
@@ -155,7 +157,7 @@
 			"Add pork pieces in batches (don't overcrowd) and brown slowly on all sides, turning frequently with tongs, about 10-15 minutes per batch.",
 			"Once all pork is browned, return all pieces to the pan (or transfer to a large pot).",
 			"Pour the glaze over the pork, bring to a boil, then simmer for about 5 minutes, stirring frequently, until the glaze thickens and coats the pork.",
-			"Serve immediately over rice with your choice of vegetables (broccoli and carrots recommended)."
+			"Serve immediately over rice with your choice of vegetables (broccoli and carrots recommended). Garnish with sesame seeds and chopped spring onion if desired."
 		],
 		"tips": [
 			"The 2-hour simmer is crucial for tender meat - don't rush it! You can simmer the night before and refrigerate, then just brown and glaze when ready to serve.",
@@ -409,6 +411,58 @@
 			"The Maillard reaction (caramelisation) on the chicken adds depth of flavour, so don't skip the charring step.",
 			"If using the oven method, spread the chicken in an even layer for consistent cooking.",
 			"The gravy should be a rich orange colour with a smooth, creamy consistency."
+		]
+	},
+	{
+		"id": 8,
+		"title": "Profiteroles",
+		"description": "Classic French choux pastry puffs filled with vanilla whipped cream and drizzled with rich chocolate sauce.",
+		"imageUrl": "/images/recipes/profiteroles.jpeg",
+		"galleryImages": ["/images/recipes/profiteroles-cross-section.jpeg"],
+		"prepTime": "30 minutes",
+		"cookTime": "25-30 minutes",
+		"totalTime": "1.5-2 hours (includes cooling)",
+		"servings": "20-24 profiteroles (serves 4-6)",
+		"category": 0,
+		"difficulty": 2,
+		"dateAdded": "2026-02-08T00:00:00",
+		"slug": "profiteroles",
+		"tags": ["chocolate", "cream", "french", "choux pastry", "dinner party", "impressive", "classic"],
+		"ingredients": [
+			"75g plain flour",
+			"60g butter",
+			"150ml water",
+			"2 large eggs, beaten",
+			"Pinch of salt",
+			"300ml double cream",
+			"1 tbsp icing sugar",
+			"1 tsp vanilla extract",
+			"150g dark chocolate",
+			"150ml double cream (for sauce)",
+			"25g butter (for sauce)"
+		],
+		"instructions": [
+			"Preheat oven to 200°C (180°C fan) / Gas 6. Line two baking trays with baking paper.",
+			"Put the 150ml water, 60g butter and pinch of salt in a medium saucepan over medium heat. Let the butter melt completely, then bring to a rolling boil.",
+			"Remove from heat immediately. Tip in the 75g plain flour all at once and beat vigorously with a wooden spoon until the mixture forms a smooth ball that pulls away from the sides of the pan. This takes about a minute.",
+			"Leave the dough to cool in the pan for 5 minutes — this stops the eggs scrambling when you add them.",
+			"Gradually add the 2 beaten eggs, a little at a time, beating well after each addition. The mixture will look slippery and separated at first but keep beating and it will come together. Stop adding egg when the dough is smooth, glossy, and drops reluctantly from the spoon when you lift it. You may not need all the egg.",
+			"Fit your piping bag with a plain round nozzle (about 1cm diameter). Fill the bag with the choux dough.",
+			"Pipe blobs about 3-4cm in diameter onto your lined trays — they will roughly double in size to golf ball sized puffs. Leave about 5cm between each. If there are any peaks on top, wet your finger and gently pat them down.",
+			"Bake for 25-30 minutes until deeply golden and crisp. Do not open the oven door during baking or they may collapse.",
+			"Remove from oven. Pierce the base of each puff with a skewer or sharp knife to release the steam inside. Transfer to a wire rack and leave to cool completely.",
+			"Pour the 300ml double cream into a large bowl. Add the 1 tbsp icing sugar and 1 tsp vanilla extract. Whip until the cream holds soft peaks. Don't over-whip or it will turn grainy.",
+			"Fit a clean piping bag with a small round nozzle. Fill with the whipped cream. Pipe cream into each cooled puff through the hole in the base.",
+			"Break the 150g dark chocolate into small pieces and place in a heatproof bowl. Heat the 150ml double cream in a small saucepan until just simmering, then pour over the chocolate. Leave for a minute, then stir gently until smooth.",
+			"Add the 25g butter to the chocolate sauce and stir until melted and combined.",
+			"Stack the filled profiteroles on a serving plate and drizzle generously with the warm chocolate sauce. Serve immediately."
+		],
+		"tips": [
+			"Aim for golf ball sized puffs after baking — pipe them about 3-4cm diameter as they roughly double in size.",
+			"The choux rises from steam, not yeast, so don't open the oven door early or they'll collapse.",
+			"Unfilled puffs keep in an airtight container for a day, or freeze for up to a month and refresh in a hot oven for 5 minutes.",
+			"Once filled with cream, eat within a few hours as they soften quickly.",
+			"If you don't have a piping bag, two teaspoons work fine for shaping the choux — the results will just be more rustic."
 		]
 	}
 ]

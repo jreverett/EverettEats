@@ -13,6 +13,8 @@ namespace EverettEats.Models
 
         public string ImageUrl { get; set; } = string.Empty;
 
+        public List<string> GalleryImages { get; set; } = [];
+
         [Required]
         public string PrepTime { get; set; } = string.Empty;
 
