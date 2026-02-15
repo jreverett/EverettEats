@@ -3,7 +3,7 @@ Personal site for hosting recipes
 
 ## Local Development
 
-Requires [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
+Requires [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
 
 ```bash
 dotnet run
