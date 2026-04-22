@@ -62,6 +62,14 @@
                     <span class="info-label">Cook</span>
                     <span class="info-value">@recipe.CookTime</span>
                 </div>
+                @if (!string.IsNullOrWhiteSpace(recipe.CoolTime))
+                {
+                    <div class="info-card">
+                        <span class="info-icon">❄️</span>
+                        <span class="info-label">Cool</span>
+                        <span class="info-value">@recipe.CoolTime</span>
+                    </div>
+                }
                 <div class="info-card">
                     <span class="info-icon">🍽️</span>
                     <span class="info-label">Serves</span>
@@ -88,7 +96,7 @@
                 </ul>
 
                 <div class="sticky-note">
-                    <p class="note-text">Don't forget to check the pantry first!</p>
+                    <p class="note-text">@stickyNote</p>
                 </div>
             </div>
 
@@ -135,6 +143,23 @@ else
     private Recipe? recipe;
     private string currentHeroImage = "";
     private List<string> allImages = [];
+    private string stickyNote = "";
+
+    private static readonly string[] StickyNotes =
+    [
+        "Don't forget to check the pantry first!",
+        "Taste as you go. Recipes are a guide, not a law!",
+        "When in doubt, add butter!",
+        "Your oven lies. Trust the skewer!",
+        "Weigh it, don't cup it. Baking is chemistry!",
+        "Room-temp butter is non-negotiable!",
+        "Don't open the oven door. I mean it!",
+        "Cold butter makes flaky pastry. Every time!",
+        "Chocolate is a food group!",
+        "Sea salt on chocolate? Non-negotiable!",
+        "Underbaked brownies beat overbaked brownies. Always!",
+        "Chill the dough. Patience is an ingredient!",
+    ];
 
     protected override async Task OnInitializedAsync()
     {
@@ -152,6 +177,7 @@ else
             }
             currentHeroImage = allImages.FirstOrDefault() ?? "";
         }
+        stickyNote = StickyNotes[Random.Shared.Next(StickyNotes.Length)];
     }
 
     private void SelectImage(string imageUrl)

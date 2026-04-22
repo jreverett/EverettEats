@@ -21,6 +21,8 @@ namespace EverettEats.Models
         [Required]
         public string CookTime { get; set; } = string.Empty;
 
+        public string CoolTime { get; set; } = string.Empty;
+
         public string TotalTime { get; set; } = string.Empty;
 
         public string Servings { get; set; } = string.Empty;
