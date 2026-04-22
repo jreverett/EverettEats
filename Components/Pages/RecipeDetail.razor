@@ -1,8 +1,10 @@
 @page "/recipe/{Slug}"
 @using EverettEats.Models
 @using EverettEats.Services
+@implements IDisposable
 @inject IRecipeService RecipeService
 @inject NavigationManager Navigation
+@inject PersistentComponentState ApplicationState
 
 @if (recipe != null)
 {
@@ -144,6 +146,7 @@ else
     private string currentHeroImage = "";
     private List<string> allImages = [];
     private string stickyNote = "";
+    private PersistingComponentStateSubscription persistingSubscription;
 
     private static readonly string[] StickyNotes =
     [
@@ -177,7 +180,28 @@ else
             }
             currentHeroImage = allImages.FirstOrDefault() ?? "";
         }
-        stickyNote = StickyNotes[Random.Shared.Next(StickyNotes.Length)];
+
+        // Persist the note chosen during prerender so the interactive render
+        // doesn't pick a different one and cause a visible swap on load.
+        persistingSubscription = ApplicationState.RegisterOnPersisting(() =>
+        {
+            ApplicationState.PersistAsJson("stickyNote", stickyNote);
+            return Task.CompletedTask;
+        });
+
+        if (!ApplicationState.TryTakeFromJson<string>("stickyNote", out var restored) || string.IsNullOrEmpty(restored))
+        {
+            stickyNote = StickyNotes[Random.Shared.Next(StickyNotes.Length)];
+        }
+        else
+        {
+            stickyNote = restored;
+        }
+    }
+
+    public void Dispose()
+    {
+        persistingSubscription.Dispose();
     }
 
     private void SelectImage(string imageUrl)

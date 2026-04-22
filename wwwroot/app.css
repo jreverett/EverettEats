@@ -691,6 +691,7 @@ body {
     color: var(--pencil-gray);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-align: center;
 }
 
 .info-value {
@@ -698,6 +699,7 @@ body {
     font-size: 1rem;
     color: var(--ink-black);
     font-weight: 600;
+    text-align: center;
 }
 
 .info-item {
