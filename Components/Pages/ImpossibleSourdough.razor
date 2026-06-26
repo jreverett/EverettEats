@@ -1,0 +1,103 @@
+@page "/recipe/impossible-sourdough"
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<PageMeta Title="Impossible Sourdough"
+          Description="A work-in-progress loaf I'm not ready to share yet."
+          NoIndex="true" />
+
+<div class="notebook-page draft-recipe-page">
+    <button @onclick="GoBack" class="back-button" type="button">
+        ← Back to recipes
+    </button>
+
+    <div class="page-header">
+        <h1 class="page-title">Impossible Sourdough 🥖</h1>
+        <p class="intro-text">
+            This one's still a draft, so I keep the notes sealed until the crumb is right.
+            If you know the words I scribbled in the margin, type them in and the loaf rises.
+        </p>
+    </div>
+
+    @if (!isOpen)
+    {
+        <div class="draft-gate">
+            <div class="search-wrapper">
+                <input type="text"
+                       @bind="passphrase"
+                       @bind:event="oninput"
+                       @onkeydown="OnKeyDown"
+                       placeholder="the words from the margin..."
+                       class="search-input"
+                       autocomplete="off"
+                       spellcheck="false"
+                       aria-label="Pass phrase" />
+            </div>
+
+            <button class="draft-open-button" type="button" @onclick="TryOpen" disabled="@isWorking">
+                @(isWorking ? "Proving…" : "Open")
+            </button>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <p class="draft-error">@errorMessage</p>
+            }
+        </div>
+    }
+
+    <div class="draft-output">
+        @if (isOpen)
+        {
+            @content
+        }
+    </div>
+</div>
+
+@code {
+    private string passphrase = "";
+    private bool isWorking;
+    private bool isOpen;
+    private string errorMessage = "";
+    private MarkupString content;
+
+    private async Task TryOpen()
+    {
+        if (isWorking)
+        {
+            return;
+        }
+
+        errorMessage = "";
+        isWorking = true;
+
+        try
+        {
+            var html = await JS.InvokeAsync<string>("kitchenOpen", "/data/impossible-sourdough.json", passphrase);
+            content = new MarkupString(html);
+            isOpen = true;
+        }
+        catch
+        {
+            // A wrong phrase makes the decrypt throw; there is nothing to show.
+            errorMessage = "the loaf won't rise. wrong words.";
+        }
+        finally
+        {
+            isWorking = false;
+        }
+    }
+
+    private async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await TryOpen();
+        }
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/");
+    }
+}

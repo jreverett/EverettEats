@@ -4,6 +4,11 @@
     <title>@GetFullTitle()</title>
     <meta name="description" content="@GetDescription()">
 
+    @if (NoIndex)
+    {
+        <meta name="robots" content="noindex, nofollow">
+    }
+
     <!-- Open Graph -->
     <meta property="og:type" content="@Type">
     <meta property="og:url" content="@GetCurrentUrl()">
@@ -26,6 +31,7 @@
     [Parameter] public string? ImageUrl { get; set; }
     [Parameter] public string Type { get; set; } = "website";
     [Parameter] public string TwitterCard { get; set; } = "summary_large_image";
+    [Parameter] public bool NoIndex { get; set; } = false;
 
     private string SiteTitle = "Everett's Recipe Notebook";
     private string DefaultDescription = "Discover delicious recipes for every occasion at Everett Eats. From appetizers to desserts, find your next favorite dish.";

@@ -1,0 +1,58 @@
+.draft-recipe-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.draft-gate {
+    max-width: 500px;
+    margin: 1.5rem auto 0;
+    text-align: center;
+}
+
+.draft-open-button {
+    margin-top: 1rem;
+    font-family: var(--font-notes);
+    font-size: 1.25rem;
+    color: white;
+    background: var(--ink-blue);
+    border: none;
+    border-radius: 25px;
+    padding: 0.55rem 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 8px var(--shadow);
+}
+
+.draft-open-button:hover:not(:disabled) {
+    background: var(--coffee-dark);
+    transform: translateY(-2px);
+}
+
+.draft-open-button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.draft-error {
+    margin-top: 1rem;
+    font-family: var(--font-notes);
+    font-size: 1.3rem;
+    color: var(--red-pen);
+    transform: rotate(-1.5deg);
+}
+
+.draft-output {
+    margin-top: 1.5rem;
+}
+
+/* The decrypted draft ships its own markup; make sure any embedded image
+   sits nicely inside the notebook page. */
+.draft-output ::deep img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow);
+}
