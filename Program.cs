@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
 // Large draft content uses bounded streaming interop, preserving SignalR's
 // default 32 KB incoming-message limit for every anonymous circuit.
 builder.Services.AddServerSideBlazor();
