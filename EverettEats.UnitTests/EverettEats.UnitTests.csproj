@@ -19,6 +19,8 @@
     </PackageReference>
     <PackageReference Include="Moq" Version="4.20.70" />
     <PackageReference Include="bunit" Version="1.36.0" />
+    <!-- bUnit's transitive minimum is affected by GHSA-pgww-w46g-26qg. -->
+    <PackageReference Include="AngleSharp" Version="1.5.0" PrivateAssets="all" />
 
     <!-- Code analysis and linting -->
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">

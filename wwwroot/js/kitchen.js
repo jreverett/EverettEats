@@ -1,7 +1,7 @@
 // Client-side reader for unlisted draft recipes that are stored encrypted.
 // The recipe text never lives in the repo as plain HTML, and the encrypted blob
-// is fetched AND unlocked entirely in the browser in one step — the bytes never
-// cross to the server, so nothing large travels over the Blazor circuit.
+// is fetched and unlocked in the browser. The result is returned as a byte
+// stream, so Blazor can transfer bounded chunks rather than one large message.
 window.kitchenOpen = async function (url, passphrase) {
   if (!globalThis.crypto || !crypto.subtle) {
     throw new Error('Web Crypto needs a secure context — open over https or http://localhost (not 0.0.0.0 or a LAN IP).');
@@ -19,5 +19,5 @@ window.kitchenOpen = async function (url, passphrase) {
     { name: 'PBKDF2', salt, iterations: 150000, hash: 'SHA-256' },
     km, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
   const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
-  return new TextDecoder().decode(pt);
+  return new Uint8Array(pt);
 };
