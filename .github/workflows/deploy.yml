@@ -3,35 +3,86 @@ name: Build and Deploy
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  build-and-deploy:
+  build-and-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
-        dotnet-version: 8.0.x
-    
-    - name: Restore dependencies
-      run: dotnet restore
-    
+        persist-credentials: false
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+      with:
+        dotnet-version: 10.0.x
+
+    # Audit direct and transitive dependencies, failing on vulnerabilities or audit errors.
+    - name: Restore and audit dependencies
+      run: >-
+        dotnet restore EverettEats.sln
+        -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low
+        -p:TreatWarningsAsErrors=true
+
     - name: Build
-      run: dotnet build --no-restore -p:TreatWarningsAsErrors=true
+      run: dotnet build EverettEats.sln --configuration Release --no-restore -p:TreatWarningsAsErrors=true
 
     - name: Run tests
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test EverettEats.sln --configuration Release --no-build --no-restore --verbosity normal
 
-    - name: Publish
-      run: dotnet publish EverettEats.csproj -c Release -o ./publish --self-contained false
+    - name: Test browser-side import validation
+      run: node --test EverettEats.UnitTests/kitchen.test.cjs
+
+    - name: Publish and package
+      run: |
+        dotnet publish EverettEats.csproj --configuration Release --no-build --no-restore -o ./publish --self-contained false
+        # Preserve executable permissions when transferring the published app between jobs.
+        tar -czf "$RUNNER_TEMP/everetteats-publish.tar.gz" -C ./publish .
+
+    - name: Upload deployment artifact
+      if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: everetteats-publish
+        path: ${{ runner.temp }}/everetteats-publish.tar.gz
+        if-no-files-found: error
+        retention-days: 1
+
+  # Keep VPS credentials off the runner that restores, builds, and tests repository code.
+  deploy:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions: {}
+    concurrency:
+      group: everetteats-production
+      cancel-in-progress: false
+
+    steps:
+    - name: Download deployment artifact
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      with:
+        name: everetteats-publish
+        path: ${{ runner.temp }}
+        digest-mismatch: error
+
+    - name: Unpack published app
+      run: |
+        mkdir -p ./publish
+        tar -xzf "$RUNNER_TEMP/everetteats-publish.tar.gz" -C ./publish
 
     - name: Deploy to VPS
-      uses: appleboy/scp-action@v0.1.5
+      uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345 # v1.0.0
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
@@ -41,7 +92,7 @@ jobs:
         rm: true
 
     - name: Update app on VPS
-      uses: appleboy/ssh-action@v1.0.0
+      uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2 # v1.2.5
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
@@ -54,4 +105,13 @@ jobs:
           sudo chown -R everetteats:everetteats /var/www/everetteats
           sudo systemctl start everetteats
           sudo rm -rf /tmp/everetteats-deploy
+          sleep 3
+          sudo systemctl is-active --quiet everetteats
+          app_pid="$(systemctl show --property MainPID --value everetteats)"
+          if [ "$app_pid" -gt 0 ] && sudo test -r "/proc/$app_pid/maps"; then
+            echo "Loaded shared framework versions:"
+            sudo sed -nE 's#.*(/shared/(Microsoft.NETCore.App|Microsoft.AspNetCore.App)/[^/]+)/.*#\1#p' "/proc/$app_pid/maps" | sort -u
+          else
+            echo "Loaded runtime inspection unavailable; service is active."
+          fi
           echo "Deployment completed at $(date)"
