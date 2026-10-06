@@ -39,8 +39,8 @@ jobs:
     - name: Run tests
       run: dotnet test EverettEats.sln --configuration Release --no-build --no-restore --verbosity normal
 
-    - name: Test browser-side import validation
-      run: node --test EverettEats.UnitTests/kitchen.test.cjs
+    - name: Run JavaScript and deployment guard tests
+      run: node --test EverettEats.UnitTests/*.test.cjs
 
     - name: Publish and package
       run: |
@@ -67,6 +67,8 @@ jobs:
     concurrency:
       group: everetteats-production
       cancel-in-progress: false
+      # Keep a late older build from replacing a newer pending deployment.
+      queue: max
 
     steps:
     - name: Download deployment artifact
@@ -81,7 +83,28 @@ jobs:
         mkdir -p ./publish
         tar -xzf "$RUNNER_TEMP/everetteats-publish.tar.gz" -C ./publish
 
+    - name: Check deployment revision
+      id: latest_main
+      shell: bash
+      run: |
+        set -euo pipefail
+        # This public repository needs no token. Check while holding the deployment lock.
+        latest_record="$(GIT_TERMINAL_PROMPT=0 timeout 30s git ls-remote --exit-code --refs \
+          "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" refs/heads/main)"
+        if [[ ! "$latest_record" =~ ^[0-9a-f]{40}$'\t'refs/heads/main$ ]]; then
+          echo "::error::Could not verify the current main revision; refusing deployment."
+          exit 1
+        fi
+        latest_sha="${latest_record%%$'\t'*}"
+        if [[ "$latest_sha" == "$GITHUB_SHA" ]]; then
+          echo "current=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "current=false" >> "$GITHUB_OUTPUT"
+          echo "Skipping superseded deployment $GITHUB_SHA; main is $latest_sha." >> "$GITHUB_STEP_SUMMARY"
+        fi
+
     - name: Deploy to VPS
+      if: steps.latest_main.outputs.current == 'true'
       uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345 # v1.0.0
       with:
         host: ${{ secrets.VPS_HOST }}
@@ -92,6 +115,7 @@ jobs:
         rm: true
 
     - name: Update app on VPS
+      if: steps.latest_main.outputs.current == 'true'
       uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2 # v1.2.5
       with:
         host: ${{ secrets.VPS_HOST }}
