@@ -55,6 +55,7 @@
 </div>
 
 @code {
+    private const long MaxDraftBytes = 128 * 1024;
     private string passphrase = "";
     private bool isWorking;
     private bool isOpen;
@@ -73,7 +74,12 @@
 
         try
         {
-            var html = await JS.InvokeAsync<string>("kitchenOpen", "/data/impossible-sourdough.json", passphrase);
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            await using var draft = await JS.InvokeAsync<IJSStreamReference>(
+                "kitchenOpen", timeout.Token, "/data/impossible-sourdough.json", passphrase);
+            await using var stream = await draft.OpenReadStreamAsync(MaxDraftBytes, timeout.Token);
+            using var reader = new StreamReader(stream);
+            var html = await reader.ReadToEndAsync(timeout.Token);
             content = new MarkupString(html);
             isOpen = true;
         }
