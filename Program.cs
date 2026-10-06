@@ -4,12 +4,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor().AddHubOptions(options =>
-{
-    // The unlisted draft recipe is unlocked in the browser from a sizable data
-    // blob that crosses the circuit; lift the 32 KB default so interop completes.
-    options.MaximumReceiveMessageSize = 10 * 1024 * 1024;
-});
+// Large draft content uses bounded streaming interop, preserving SignalR's
+// default 32 KB incoming-message limit for every anonymous circuit.
+builder.Services.AddServerSideBlazor();
 
 // Enable response compression
 builder.Services.AddResponseCompression(options =>
