@@ -106,11 +106,15 @@ jobs:
           sudo systemctl start everetteats
           sudo rm -rf /tmp/everetteats-deploy
           sleep 3
-          sudo systemctl is-active --quiet everetteats
-          app_pid="$(systemctl show --property MainPID --value everetteats)"
-          if [ "$app_pid" -gt 0 ] && sudo test -r "/proc/$app_pid/maps"; then
-            echo "Loaded shared framework versions:"
-            sudo sed -nE 's#.*(/shared/(Microsoft.NETCore.App|Microsoft.AspNetCore.App)/[^/]+)/.*#\1#p' "/proc/$app_pid/maps" | sort -u
+          systemctl is-active --quiet everetteats
+          app_pid="$(systemctl show --property MainPID --value everetteats)" || app_pid=0
+          if [ "$app_pid" -gt 0 ] && [ -r "/proc/$app_pid/maps" ]; then
+            runtime_versions="$(sed -nE 's#.*(/shared/(Microsoft.NETCore.App|Microsoft.AspNetCore.App)/[^/]+)/.*#\1#p' "/proc/$app_pid/maps" | sort -u)"
+            if [ -n "$runtime_versions" ]; then
+              printf 'Loaded shared framework versions:\n%s\n' "$runtime_versions"
+            else
+              echo "Loaded runtime versions unavailable; service is active."
+            fi
           else
             echo "Loaded runtime inspection unavailable; service is active."
           fi
