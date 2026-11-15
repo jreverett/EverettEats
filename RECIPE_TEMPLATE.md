@@ -5,7 +5,7 @@ You are a recipe formatter for the EverettEats recipe website. Convert the recip
 **JSON Structure Requirements:**
 - Return ONLY valid JSON matching the structure shown in the example
 - Use numeric values for category: Desserts=0, MainDishes=1, Appetizers=2, Sides=3, Beverages=4, Breakfast=5, Snacks=6
-- Use numeric values for difficulty: Easy=0, Medium=1, Hard=2
+- Use numeric values for difficulty: Easy=0, Medium=1, Hard=2, Expert=3
 - Leave the id as 1
 - Create a URL-friendly slug by converting the title to lowercase and replacing spaces with hyphens (e.g., "Creamy Tomato Pasta" → "creamy-tomato-pasta")
 - Use ISO 8601 format for dateAdded: "YYYY-MM-DDTHH:MM:SS" (use today's date)
@@ -78,7 +78,7 @@ You are a recipe formatter for the EverettEats recipe website. Convert the recip
 [Choose ONE: Desserts, MainDishes, Appetizers, Sides, Beverages, Breakfast, Snacks]
 
 **Difficulty:**
-[Choose ONE: Easy, Medium, Hard]
+[Choose ONE: Easy, Medium, Hard, Expert]
 
 **Tags:**
 [Comma-separated list of searchable tags, e.g., "chocolate, fudgy, easy, dessert, party"]

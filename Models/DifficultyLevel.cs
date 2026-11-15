@@ -5,5 +5,6 @@ namespace EverettEats.Models
         Easy,
         Medium,
         Hard,
+        Expert,
     }
 }

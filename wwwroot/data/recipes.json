@@ -537,5 +537,71 @@
 			"Un-iced cake keeps in an airtight container at room temperature for up to 5 days; iced cake keeps refrigerated for 1–2 days.",
 			"Bring refrigerated cake to room temperature before serving for the best texture."
 		]
+	},
+	{
+		"id": 10,
+		"title": "Bánh Bò Nướng (Vietnamese Pandan Honeycomb Cake)",
+		"description": "A chewy, bouncy coconut-pandan cake with a golden crust and a striking honeycomb of vertical strands inside. Based on Cindy Her's recipe (C.HerCreations), adapted for a UK fan oven. Notoriously finicky - don't expect to nail it first time.",
+		"imageUrl": "/images/recipes/example-placeholder.svg",
+		"prepTime": "30 minutes",
+		"cookTime": "55-65 minutes",
+		"coolTime": "2 hours",
+		"totalTime": "3 hours 30 minutes (includes cooling)",
+		"servings": "10 slices",
+		"category": 0,
+		"difficulty": 3,
+		"dateAdded": "2026-11-15T00:00:00",
+		"slug": "banh-bo-nuong",
+		"tags": [
+			"banh bo nuong",
+			"vietnamese",
+			"pandan",
+			"coconut",
+			"honeycomb cake",
+			"tapioca",
+			"gluten-free",
+			"dairy-free",
+			"asian dessert",
+			"expert"
+		],
+		"ingredients": [
+			"400ml full-fat coconut milk (1 tin)",
+			"214g caster sugar",
+			"6g salt",
+			"1 tsp pandan extract (Butterfly brand)",
+			"½ tsp coconut extract",
+			"260g eggs, weighed out of shell, room temperature",
+			"270g tapioca flour/starch (e.g. Thai Crown, \"Bột năng\")",
+			"34g rice flour, regular not glutinous (e.g. Erawan red label)",
+			"15g baking powder (check it's in date)",
+			"22g melted coconut oil or neutral oil",
+			"3 tbsp coconut syrup, to serve (optional)"
+		],
+		"instructions": [
+			"Put an ungreased, unlined 20cm round, 7.5cm deep fixed-base aluminium tin on the lower-middle shelf and preheat to 145°C fan (160°C conventional) with the tin inside.",
+			"Warm the 400ml coconut milk with the 214g caster sugar and 6g salt over medium heat until the sugar just dissolves. Do not boil. Off the heat, stir in the 1 tsp pandan extract and ½ tsp coconut extract. Cool to body temperature.",
+			"Put the 260g eggs in a large bowl. Snip the yolks with scissors, then stir slowly with a fork just to loosen. Patchy is fine. Do NOT whisk - air in the eggs makes the cake puff up and collapse.",
+			"Pour the cooled coconut mixture onto the eggs. Sift in the 270g tapioca flour, 34g rice flour and 15g baking powder. Fold gently with a spatula until hydrated. Lumps are fine.",
+			"Push the batter through a sieve once with a spatula. Gently stir in the 22g melted oil - don't forget this step.",
+			"Rest for 10 minutes, then skim any foam off the top. Meanwhile, set up a cooling rack raised on a few mugs.",
+			"Give the batter a slow stir, pour into the hot tin and get it straight back in the oven. Keep the door shut until 50 minutes.",
+			"Bake for 55-65 minutes, until the whole top is light brown and dry with no wet green patches, and a probe reads 95-98°C in the centre. If the centre is cooked but the top is still pale or tacky, give it 5 minutes at 160°C fan. If the edges darken too fast, tent loosely with foil.",
+			"Straight out of the oven, flip the tin upside down onto the raised rack. Leave it hanging until completely cool, about 2 hours.",
+			"Turn upright, run a thin knife round the edge, invert onto a board and turn the right way up.",
+			"Slice with a lightly oiled knife. Drizzle slices with the 3 tbsp coconut syrup, if using. Eat at room temperature."
+		],
+		"tips": [
+			"The tin matters: 20cm (8 inch) round, 7.5cm (3 inch) deep, fixed base, plain anodised aluminium with NO non-stick coating (e.g. PME RND083 - avoid LBR083, which is loose base). Springform/loose-base tins leak and non-stick tins let the cake slide out when flipped.",
+			"Don't grease or line the tin. The cake must grip the bare sides so it can hang upside down while cooling.",
+			"Oven: 145°C fan on the lower-middle shelf, or 160°C conventional (top and bottom heat, fan off). Never use a grill setting.",
+			"Fan ovens make it rise fast and then deflate. The lower temperature (145°C fan) and the rice flour counter this.",
+			"The honeycomb forms during baking: gas from the baking powder rises from the hot base and sides in streams, and the tapioca sets around it. Cooling just firms it up.",
+			"Cooling upside down stops the top settling into a dense band.",
+			"Dense top band: the top wasn't set. Bake until fully dry and light brown, and flip immediately.",
+			"Collapsed: over-whisked eggs, non-stick tin, oven too hot, or door opened too much. If it still collapses, reduce the baking powder to 12g.",
+			"Coconut syrup goes on top only. In the batter it browns faster and weakens the structure.",
+			"Don't cut it warm - it'll be gummy and eggy, and the strands won't show.",
+			"Store at room temperature, airtight, for up to 2 days, with cling film pressed onto any cut face. For longer, keep it in the fridge - it firms up, so microwave a slice for 10-15 seconds to bring back the chew."
+		]
 	}
 ]
