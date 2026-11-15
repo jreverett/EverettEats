@@ -542,9 +542,9 @@
 		"id": 10,
 		"title": "Bánh Bò Nướng (Vietnamese Pandan Honeycomb Cake)",
 		"description": "A chewy, bouncy coconut-pandan cake with a golden crust and a striking honeycomb of vertical strands inside. Based on Cindy Her's recipe (C.HerCreations), adapted for a UK fan oven. Notoriously finicky - don't expect to nail it first time.",
-		"imageUrl": "/images/recipes/banh-bo-nuong.jpeg",
+		"imageUrl": "/images/recipes/banh-bo-nuong-whole.jpeg",
 		"galleryImages": [
-			"/images/recipes/banh-bo-nuong-whole.jpeg"
+			"/images/recipes/banh-bo-nuong.jpeg"
 		],
 		"prepTime": "30 minutes",
 		"cookTime": "55-65 minutes",

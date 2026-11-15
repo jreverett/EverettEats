@@ -46,7 +46,7 @@
         }
 
         <div class="recipe-header">
-            <h1 class="recipe-title">@recipe.Title</h1>
+            <h1 class="recipe-title @(recipe.TitleNeedsFallbackFont ? "font-handwritten-fallback" : "")">@recipe.Title</h1>
 
             @if (!string.IsNullOrEmpty(recipe.Description))
             {

@@ -58,7 +58,7 @@
                         </div>
                         
                         <div class="recipe-info">
-                            <h3 class="recipe-name">@recipe.Title</h3>
+                            <h3 class="recipe-name @(recipe.TitleNeedsFallbackFont ? "font-handwritten-fallback" : "")">@recipe.Title</h3>
                             <div class="recipe-meta">
                                 <span class="cook-time">⏱️ @recipe.TotalTime</span>
                                 <span class="difficulty">@GetDifficultyEmoji(recipe.Difficulty)</span>
