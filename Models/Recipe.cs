@@ -55,10 +55,10 @@ namespace EverettEats.Models
 
         public static bool ContainsVietnamese(string text) =>
             text.Any(c =>
-                c is '\u0110' or '\u0111'                // Đ đ
-                or '\u01A0' or '\u01A1'                  // Ơ ơ
-                or '\u01AF' or '\u01B0'                  // Ư ư
-                or (>= '\u1EA0' and <= '\u1EF9')         // precomposed letters with tone marks
-                or (>= '\u0300' and <= '\u0323'));       // combining tone marks
+                c is '\u0110' or '\u0111' // Đ đ
+                or '\u01A0' or '\u01A1' // Ơ ơ
+                or '\u01AF' or '\u01B0' // Ư ư
+                or (>= '\u1EA0' and <= '\u1EF9') // precomposed letters with tone marks
+                or (>= '\u0300' and <= '\u0323')); // combining tone marks
     }
 }
