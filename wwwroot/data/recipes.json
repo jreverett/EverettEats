@@ -542,7 +542,10 @@
 		"id": 10,
 		"title": "Bánh Bò Nướng (Vietnamese Pandan Honeycomb Cake)",
 		"description": "A chewy, bouncy coconut-pandan cake with a golden crust and a striking honeycomb of vertical strands inside. Based on Cindy Her's recipe (C.HerCreations), adapted for a UK fan oven. Notoriously finicky - don't expect to nail it first time.",
-		"imageUrl": "/images/recipes/example-placeholder.svg",
+		"imageUrl": "/images/recipes/banh-bo-nuong.jpeg",
+		"galleryImages": [
+			"/images/recipes/banh-bo-nuong-whole.jpeg"
+		],
 		"prepTime": "30 minutes",
 		"cookTime": "55-65 minutes",
 		"coolTime": "2 hours",
@@ -577,6 +580,16 @@
 			"22g melted coconut oil or neutral oil",
 			"3 tbsp coconut syrup, to serve (optional)"
 		],
+		"equipment": [
+			"20cm (8 inch) round tin, 7.5cm (3 inch) deep",
+			"Fixed base, plain anodised aluminium, NO non-stick coating (e.g. PME RND083 - avoid LBR083, which is loose base)",
+			"Do NOT grease or line the tin. The cake must grip the bare sides so it can hang upside down while cooling",
+			"Avoid springform/loose-base tins (the batter leaks) and non-stick tins (the cake slides out when flipped)",
+			"Oven: 145°C fan on the lower-middle shelf, or 160°C conventional (top and bottom heat, fan off). Never use a grill setting",
+			"Probe thermometer",
+			"Fine sieve",
+			"Cooling rack raised on a few mugs"
+		],
 		"instructions": [
 			"Put an ungreased, unlined 20cm round, 7.5cm deep fixed-base aluminium tin on the lower-middle shelf and preheat to 145°C fan (160°C conventional) with the tin inside.",
 			"Warm the 400ml coconut milk with the 214g caster sugar and 6g salt over medium heat until the sugar just dissolves. Do not boil. Off the heat, stir in the 1 tsp pandan extract and ½ tsp coconut extract. Cool to body temperature.",
@@ -591,9 +604,6 @@
 			"Slice with a lightly oiled knife. Drizzle slices with the 3 tbsp coconut syrup, if using. Eat at room temperature."
 		],
 		"tips": [
-			"The tin matters: 20cm (8 inch) round, 7.5cm (3 inch) deep, fixed base, plain anodised aluminium with NO non-stick coating (e.g. PME RND083 - avoid LBR083, which is loose base). Springform/loose-base tins leak and non-stick tins let the cake slide out when flipped.",
-			"Don't grease or line the tin. The cake must grip the bare sides so it can hang upside down while cooling.",
-			"Oven: 145°C fan on the lower-middle shelf, or 160°C conventional (top and bottom heat, fan off). Never use a grill setting.",
 			"Fan ovens make it rise fast and then deflate. The lower temperature (145°C fan) and the rice flour counter this.",
 			"The honeycomb forms during baking: gas from the baking powder rises from the hot base and sides in streams, and the tapioca sets around it. Cooling just firms it up.",
 			"Cooling upside down stops the top settling into a dense band.",

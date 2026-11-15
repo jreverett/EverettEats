@@ -29,6 +29,8 @@ namespace EverettEats.Models
 
         public List<string> Ingredients { get; set; } = [];
 
+        public List<string> Equipment { get; set; } = [];
+
         public List<string> Instructions { get; set; } = [];
 
         public List<string> Tips { get; set; } = [];

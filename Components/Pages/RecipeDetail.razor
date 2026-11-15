@@ -97,6 +97,23 @@
                     }
                 </ul>
 
+                @if (recipe.Equipment.Any())
+                {
+                    <div class="equipment-section">
+                        <h2 class="section-header">
+                            <span>Kit List</span>
+                            <span class="pencil-mark">✎</span>
+                        </h2>
+
+                        <ul class="equipment-list">
+                            @foreach (var item in recipe.Equipment)
+                            {
+                                <li class="equipment-item">@item</li>
+                            }
+                        </ul>
+                    </div>
+                }
+
                 <div class="sticky-note">
                     <p class="note-text">@stickyNote</p>
                 </div>

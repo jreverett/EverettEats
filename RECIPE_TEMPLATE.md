@@ -33,6 +33,9 @@ You are a recipe formatter for the EverettEats recipe website. Convert the recip
 		"Ingredient 1 with measurements",
 		"Ingredient 2 with measurements"
 	],
+	"equipment": [
+		"Optional: specific tin, oven setting or tool the recipe depends on"
+	],
 	"instructions": [
 		"Step 1 instruction",
 		"Step 2 instruction"
