@@ -58,9 +58,11 @@ public class ImpossibleSourdoughTests
     {
         using var context = new TestContext();
         var js = new Mock<IJSRuntime>();
+#pragma warning disable BL0016 // Moq setup expressions do not execute JavaScript.
         js.Setup(r => r.InvokeAsync<IJSStreamReference>(
             "kitchenOpen", It.IsAny<CancellationToken>(), It.IsAny<object?[]>()))
             .ThrowsAsync(new JSException("Decryption failed."));
+#pragma warning restore BL0016
         context.Services.AddSingleton(js.Object);
         var page = context.RenderComponent<ImpossibleSourdough>();
 
@@ -74,9 +76,11 @@ public class ImpossibleSourdoughTests
     private static Mock<IJSRuntime> RegisterJs(TestContext context, IJSStreamReference reference)
     {
         var js = new Mock<IJSRuntime>();
+#pragma warning disable BL0016 // Moq setup expressions do not execute JavaScript.
         js.Setup(r => r.InvokeAsync<IJSStreamReference>(
             "kitchenOpen", It.IsAny<CancellationToken>(), It.IsAny<object?[]>()))
             .ReturnsAsync(reference);
+#pragma warning restore BL0016
         context.Services.AddSingleton(js.Object);
         return js;
     }

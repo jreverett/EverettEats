@@ -10,7 +10,7 @@
 		{
 			"label": "Run with Hot Reload (dotnet watch)",
 			"type": "shell",
-			"command": "dotnet watch run",
+			"command": "dotnet watch Program.cs",
 			"group": "build"
 		}
 	]
