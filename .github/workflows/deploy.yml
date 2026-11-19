@@ -24,27 +24,26 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
       with:
-        dotnet-version: 10.0.x
+        dotnet-version: 11.0.x
 
     # Audit direct and transitive dependencies, failing on vulnerabilities or audit errors.
     - name: Restore and audit dependencies
-      run: >-
-        dotnet restore EverettEats.sln
-        -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low
-        -p:TreatWarningsAsErrors=true
+      run: |
+        dotnet restore Program.cs -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low -p:TreatWarningsAsErrors=true
+        dotnet restore EverettEats.UnitTests/EverettEats.UnitTests.csproj -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low -p:TreatWarningsAsErrors=true
 
     - name: Build
-      run: dotnet build EverettEats.sln --configuration Release --no-restore -p:TreatWarningsAsErrors=true
+      run: dotnet build EverettEats.UnitTests/EverettEats.UnitTests.csproj --configuration Release --no-restore -p:TreatWarningsAsErrors=true
 
     - name: Run tests
-      run: dotnet test EverettEats.sln --configuration Release --no-build --no-restore --verbosity normal
+      run: dotnet test EverettEats.UnitTests/EverettEats.UnitTests.csproj --configuration Release --no-build --no-restore --verbosity normal
 
     - name: Run JavaScript and deployment guard tests
       run: node --test EverettEats.UnitTests/*.test.cjs
 
     - name: Publish and package
       run: |
-        dotnet publish EverettEats.csproj --configuration Release --no-build --no-restore -o ./publish --self-contained false
+        dotnet publish Program.cs --configuration Release --no-build --no-restore -o ./publish --self-contained false
         # Preserve executable permissions when transferring the published app between jobs.
         tar -czf "$RUNNER_TEMP/everetteats-publish.tar.gz" -C ./publish .
 

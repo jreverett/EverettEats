@@ -1,3 +1,19 @@
+#:sdk Microsoft.NET.Sdk.Web
+#:property TargetFramework=net11.0
+#:property AssemblyName=EverettEats
+#:property RootNamespace=EverettEats
+#:property PublishAot=false
+#:property EnableDefaultItems=true
+#:property EnableDefaultCompileItems=true
+#:property FileBasedProgramCanSkipMSBuild=false
+#:property DefaultItemExcludes=$(DefaultItemExcludes);EverettEats.UnitTests/**;artifacts/**;publish/**;Program.cs
+#:property EnforceCodeStyleInBuild=true
+#:property EnableNETAnalyzers=true
+#:property AnalysisLevel=latest
+#:property GenerateDocumentationFile=true
+#:property NoWarn=$(NoWarn);CS1591
+#:package StyleCop.Analyzers@1.2.0-beta.556
+
 using EverettEats.Services;
 
 var builder = WebApplication.CreateBuilder(args);
