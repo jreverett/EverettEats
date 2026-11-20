@@ -43,7 +43,10 @@ jobs:
 
     - name: Publish and package
       run: |
-        dotnet publish Program.cs --configuration Release --no-restore -o ./publish --self-contained false
+        dotnet publish Program.cs --configuration Release --runtime linux-x64 --self-contained true -o ./publish -p:TreatWarningsAsErrors=true
+        test -f ./publish/libcoreclr.so
+        test -f ./publish/libhostpolicy.so
+        (cd publish && sha256sum EverettEats.dll libcoreclr.so libhostpolicy.so > SHA256SUMS)
         # Preserve executable permissions when transferring the published app between jobs.
         tar -czf "$RUNNER_TEMP/everetteats-publish.tar.gz" -C ./publish .
 
@@ -122,11 +125,7 @@ jobs:
         key: ${{ secrets.VPS_PRIVATE_KEY }}
         script: |
           set -e
-          if ! dotnet --list-runtimes | grep -q '^Microsoft.AspNetCore.App 11\.'; then
-            sudo apt-get update
-            sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y aspnetcore-runtime-11.0
-          fi
-          dotnet --list-runtimes | grep '^Microsoft.AspNetCore.App 11\.'
+          (cd /tmp/everetteats-deploy/publish && sha256sum --check SHA256SUMS)
           sudo systemctl stop everetteats
           sudo rm -rf /var/www/everetteats/*
           sudo mv /tmp/everetteats-deploy/publish/* /var/www/everetteats/
@@ -135,8 +134,5 @@ jobs:
           sudo rm -rf /tmp/everetteats-deploy
           sleep 3
           systemctl is-active --quiet everetteats
-          app_pid="$(systemctl show --property MainPID --value everetteats)"
-          runtime_versions="$(sudo sed -nE 's#.*(/shared/(Microsoft.NETCore.App|Microsoft.AspNetCore.App)/[^/]+)/.*#\1#p' "/proc/$app_pid/maps" | sort -u)"
-          printf 'Loaded shared framework versions:\n%s\n' "$runtime_versions"
-          printf '%s\n' "$runtime_versions" | grep -q '/Microsoft.AspNetCore.App/11\.'
+          (cd /var/www/everetteats && sha256sum --check SHA256SUMS)
           echo "Deployment completed at $(date)"
